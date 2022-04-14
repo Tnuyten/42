@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/11 13:57:17 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/04/14 17:39:52 by tnuyten          ###   ########.fr       */
+/*   Created: 2021/10/11 15:23:13 by tnuyten           #+#    #+#             */
+/*   Updated: 2021/10/26 21:34:03 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
+#include <stdlib.h>
 
-# include "libft/libft.h"
-# include "queue/queue_operations_push.h"
-# include "sort/sort_queue.h"
+size_t	ft_strlen(const char *c)
+{
+	int	count;
 
-int	has_duplicates(t_queue *queue);
-int	parse_input(t_queue **a, int argc, char **argv);
-
-#endif
+	count = 0;
+	while (*c)
+	{
+		c++;
+		count++;
+	}
+	return (count);
+}

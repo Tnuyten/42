@@ -1,23 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/11 13:57:17 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/04/14 17:39:52 by tnuyten          ###   ########.fr       */
+/*   Created: 2021/10/13 17:48:21 by tnuyten           #+#    #+#             */
+/*   Updated: 2021/10/27 16:33:42 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
+#include "libft.h"
 
-# include "libft/libft.h"
-# include "queue/queue_operations_push.h"
-# include "sort/sort_queue.h"
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
+{
+	t_list	*res;
+	t_list	*tmp;
 
-int	has_duplicates(t_queue *queue);
-int	parse_input(t_queue **a, int argc, char **argv);
-
-#endif
+	res = NULL;
+	if (!lst)
+		return (NULL);
+	while (lst)
+	{
+		tmp = ft_lstnew(f(lst->content));
+		if (!tmp)
+		{
+			if (res)
+				ft_lstclear(&res, del);
+			return (NULL);
+		}
+		if (res == NULL)
+			res = tmp;
+		else
+			ft_lstadd_back(&res, tmp);
+		lst = lst->next;
+	}
+	return (res);
+}

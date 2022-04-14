@@ -1,23 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/11 13:57:17 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/04/14 17:39:52 by tnuyten          ###   ########.fr       */
+/*   Created: 2021/10/12 19:13:01 by tnuyten           #+#    #+#             */
+/*   Updated: 2021/10/26 23:24:42 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
+#include "libft.h"
 
-# include "libft/libft.h"
-# include "queue/queue_operations_push.h"
-# include "sort/sort_queue.h"
+void	ft_lstadd_back(t_list **lst, t_list *new_lst)
+{
+	t_list	*tmp;
 
-int	has_duplicates(t_queue *queue);
-int	parse_input(t_queue **a, int argc, char **argv);
-
-#endif
+	if (!lst)
+		return ;
+	tmp = lst[0];
+	if (tmp == NULL)
+	{
+		lst[0] = new_lst;
+		return ;
+	}
+	while (tmp->next != NULL)
+		tmp = tmp->next;
+	tmp->next = new_lst;
+}

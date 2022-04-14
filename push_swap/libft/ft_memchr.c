@@ -1,23 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/11 13:57:17 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/04/14 17:39:52 by tnuyten          ###   ########.fr       */
+/*   Created: 2021/10/11 15:23:13 by tnuyten           #+#    #+#             */
+/*   Updated: 2021/10/27 00:06:07 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
+#include <stdlib.h>
 
-# include "libft/libft.h"
-# include "queue/queue_operations_push.h"
-# include "sort/sort_queue.h"
-
-int	has_duplicates(t_queue *queue);
-int	parse_input(t_queue **a, int argc, char **argv);
-
-#endif
+void	*ft_memchr(const void *s, int c, size_t n)
+{
+	while (n > 0)
+	{
+		if (*(unsigned char *)s == (unsigned char)c)
+		{
+			return ((void *)s);
+		}
+		s++;
+		n--;
+	}
+	return (NULL);
+}

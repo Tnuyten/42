@@ -1,23 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/11 13:57:17 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/04/14 17:39:52 by tnuyten          ###   ########.fr       */
+/*   Created: 2021/10/07 13:45:25 by tnuyten           #+#    #+#             */
+/*   Updated: 2021/10/26 21:41:59 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
+#include <stdlib.h>
 
-# include "libft/libft.h"
-# include "queue/queue_operations_push.h"
-# include "sort/sort_queue.h"
+void	*ft_memset(void *b, int c, size_t len)
+{
+	void	*orig;
 
-int	has_duplicates(t_queue *queue);
-int	parse_input(t_queue **a, int argc, char **argv);
-
-#endif
+	orig = b;
+	while (len)
+	{
+		*((unsigned char *)b) = c;
+		b++;
+		len--;
+	}
+	return (orig);
+}

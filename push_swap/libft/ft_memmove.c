@@ -1,23 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/11 13:57:17 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/04/14 17:39:52 by tnuyten          ###   ########.fr       */
+/*   Created: 2021/10/07 13:45:25 by tnuyten           #+#    #+#             */
+/*   Updated: 2021/10/27 16:29:20 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
+#include <stdlib.h>
 
-# include "libft/libft.h"
-# include "queue/queue_operations_push.h"
-# include "sort/sort_queue.h"
+void	*ft_memmove(void *dst, const void *src, size_t len)
+{
+	char		*d;
+	const char	*s;
 
-int	has_duplicates(t_queue *queue);
-int	parse_input(t_queue **a, int argc, char **argv);
-
-#endif
+	if (dst == NULL && src == NULL && len != 0)
+		return (NULL);
+	s = src;
+	d = dst;
+	if (d < s)
+	{
+		while (len--)
+		{
+			*d = *s++;
+			d++;
+		}
+	}
+	else
+	{
+		while (len)
+		{
+			*(d + len - 1) = *(s + len - 1);
+			len--;
+		}
+	}
+	return (dst);
+}

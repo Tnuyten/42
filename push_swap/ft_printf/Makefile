@@ -6,18 +6,14 @@
 #    By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/11 14:33:40 by tnuyten           #+#    #+#              #
-#    Updated: 2022/04/14 17:41:23 by tnuyten          ###   ########.fr        #
+#    Updated: 2021/11/18 16:39:03 by tnuyten          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS =				push_swap.c \
-					queue/queue.c \
-					queue/queue_operations_push.c \
-					queue/queue_operations_swap.c \
-					queue/queue_operations_rotate.c \
-					queue/queue_operations_reverse_rotate.c \
-					sort/sort_queue.c \
-					sort/sort_queue_helpers.c
+SRCS =				ft_printf.c \
+					ft_format_func1.c \
+					ft_format_func2.c \
+					libft_func.c
 
 FILES = $(SRCS)
 
@@ -27,30 +23,26 @@ CC =			gcc
 RM =			rm -f
 CFLAGS =		-Wall -Wextra -Werror
 
-NAME =			push_swap
+NAME =			libftprintf.a
 
 
-all:			libft ft_printf $(NAME)
+all:			$(NAME)
 
-libft:
-				@$(MAKE) -C libft
+$(NAME):		$(OBJS)
+					ar rcs $(NAME) $(OBJS)
 
-ft_printf:
-				@$(MAKE) -C ft_printf
-
-$(NAME):		$(OBJS) libft/libft.a ft_printf/libftprintf.a
+test: 			$(NAME)
 
 clean:
 				$(RM) $(OBJS)
-					@$(MAKE) -C libft clean
-					@$(MAKE) -C ft_printf clean
-
 
 fclean:			clean
 					$(RM) $(NAME)
-					@$(MAKE) -C libft fclean
-					@$(MAKE) -C ft_printf fclean
 
 re:				fclean $(NAME)
 
-.PHONY:			all clean fclean re libft ft_printf
+bonus:
+				@$(MAKE) BONUS_ADD=1 all
+
+
+.PHONY:			all clean fclean re bonus

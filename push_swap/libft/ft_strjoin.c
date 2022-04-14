@@ -1,23 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/11 13:57:17 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/04/14 17:39:52 by tnuyten          ###   ########.fr       */
+/*   Created: 2021/10/07 12:16:27 by tnuyten           #+#    #+#             */
+/*   Updated: 2021/10/27 16:19:25 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
+#include "libft.h"
 
-# include "libft/libft.h"
-# include "queue/queue_operations_push.h"
-# include "sort/sort_queue.h"
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	int		len1;
+	int		len2;
+	char	*ptr;
+	char	*ptr2;
 
-int	has_duplicates(t_queue *queue);
-int	parse_input(t_queue **a, int argc, char **argv);
-
-#endif
+	if (!s1 || !s2)
+		return (NULL);
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	ptr = malloc(len1 + len2 + 1);
+	if (!ptr)
+		return (NULL);
+	ptr2 = ptr;
+	while (*s1)
+	{
+		*ptr = *s1++;
+		ptr++;
+	}
+	while (*s2)
+	{
+		*ptr = *s2++;
+		ptr++;
+	}
+	*ptr = '\0';
+	return (ptr2);
+}
