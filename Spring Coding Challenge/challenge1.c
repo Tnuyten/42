@@ -10,11 +10,11 @@
  **/
 
 //MACROS
-int MAX_MOBS = 50;
-int HERO_COUNT = 3;
+int MAX_SPIDERS = 80;
 
 //UNIT STRUCT
 typedef struct units {
+    //Given values
     int id;
     int type;
     int x;
@@ -27,10 +27,16 @@ typedef struct units {
     int near_base;
     int threat_for;
 
+    //Calculated values
     int distance_to_base;
     struct units* target;
     struct units* attackers[3];
+    int attacker_count;
 } unit;
+
+// typedef struct s_hero {
+//     int id;
+// } hero;
 
 //BASE STRUCT
 typedef struct s_base {
@@ -41,88 +47,122 @@ typedef struct s_base {
 } base;
 
 // GLOBAL VARIABLES
-unit** mobs;
-unit** heroes;
-unit** targets;
-int mobcounter = 0;
-int herocounter = 0;
-int targetcounter = 0;
-
-base* castle;
+unit**  spiders;
+int     spidercounter = 0;
+unit**  heroes;
+int     herocounter = 0;
+unit**  enemies;
+int     enemycounter = 0;
+base*   castle;
+base*   enemy_castle;
+int turn = 0;
 
 //FUNCTION PROTOTYPES
-//      Main storage
+//      Storage
 unit* init_unit(int id, int type, int x, int y, int shield_life, int is_controlled, int health, int vx, int vy, int near_base, int threat_for, int distance_to_base);
-base* init_base(int x, int y, int health, int mana);
+void init_base(int x, int y, int health, int mana);
 void free_units();
 void free_base();
+void init_enemy_base();
 void add_unit(unit* entity);
 
-//      debug
-void print_mob(int index);
-void print_mobs();
+//      Scan
+unit* scan_entity(int entity_count);
+void scan_base(int base_x, int base_y);
+
+//      Debug
+void print_spider(int index);
+void print_spiders();
 void print_hero(int index);
 void print_heroes();
+void print_enemy(int index);
+void print_enemies();
 
-//      algo
-int has_attackers(unit *mob);
-void move_to_base(unit *hero);
-unit* get_closest_target_to_base();
-void assign_target_to_hero(unit* target, unit* hero);
+//      Find Targets
+void add_target_to_hero(unit* target, unit* hero);
 void remove_target_from_hero(unit* hero);
-int distance(int base_x, int base_y, int unit_x, int unit_y);
+int has_attackers(unit *spider);
+unit* get_closest_spider_to_base();
+unit* get_closest_spider_to_hero(unit* hero);
+unit* get_enemy_hero();
+unit* get_enemy_hero_in_base();
+unit* get_closest_attacking_spider_enemy();
 
+//      Algo
+int distance(int base_x, int base_y, int unit_x, int unit_y);
+int distance_to_target(unit *hero);
+int distance_to_enemy(unit* entity, unit* enemy);
+int distance_to_enemy_base(unit* entity);
+
+//      Hero Actions
+void move_to_base(unit *hero);
+void move_to_hero_target(unit* hero);
+void move_to_target(unit* target);
+void move_to_enemy_base();
+void move_to(int x, int y);
+int cast_wind(unit* hero, unit* target, int x, int y);
+int cast_shield(unit* hero, unit* target);
+int cast_control(unit* hero, unit* target, int x, int y);
+
+
+//      Roles
+void attacker_behavior(unit* hero);
+void defender_behavior(unit* hero);
+void collector_behavior(unit* hero);
 
 //FUNCTIONS
 // Create a unit
 unit* init_unit(int id, int type, int x, int y, int shield_life, int is_controlled, int health, int vx, int vy, int near_base, int threat_for, int distance_to_base)
 {
-    unit* mob = malloc(sizeof(unit));
+    unit* entity = malloc(sizeof(unit));
 
-    mob->id = id;
-    mob->type = type;
-    mob->x = x;
-    mob->y = y;
-    mob->shield_life = shield_life;
-    mob->is_controlled = is_controlled;
-    mob->health = health;
-    mob->vx = vx;
-    mob->vy = vy;
-    mob->near_base = near_base;
-    mob->threat_for = threat_for;
+    entity->id = id;
+    entity->type = type;
+    entity->x = x;
+    entity->y = y;
+    entity->shield_life = shield_life;
+    entity->is_controlled = is_controlled;
+    entity->health = health;
+    entity->vx = vx;
+    entity->vy = vy;
+    entity->near_base = near_base;
+    entity->threat_for = threat_for;
 
-    mob->distance_to_base = distance_to_base;
-    mob->target = NULL;
-    for(int i = 0; i < HERO_COUNT; i++)
+    entity->distance_to_base = distance_to_base;
+    entity->target = NULL;
+    for(int i = 0; i < 3; i++)
     {
-        mob->attackers[i] = NULL;
+        entity->attackers[i] = NULL;
     }
+    entity->attacker_count = 0;
 
-    return mob;
+    return entity;
 };
 
 // Create the base
-base* init_base(int x, int y, int health, int mana)
+void init_base(int x, int y, int health, int mana)
 {
-    base* basis = malloc(sizeof(base));
-    basis->x = x;
-    basis->y = y;
-    basis->health = health;
-    basis->mana = mana;
-
-    return basis;
+    castle = malloc(sizeof(base));
+    castle->x = x;
+    castle->y = y;
+    castle->health = health;
+    castle->mana = mana;
 }
 
-// Free a unit
+// Free all units and heroes
 void free_units()
 {
-    for(int i = 0; i < mobcounter; i++)
+    for(int i = 0; i < spidercounter; i++)
     {
-        free(mobs[i]);
+        free(spiders[i]);
     }
     for(int i = 0; i < herocounter; i++)
     {
         free(heroes[i]);
+    }
+    for(int i = 0; i < enemycounter; i++)
+    {
+        free(enemies[i]);
     }
 }
 
@@ -132,18 +172,27 @@ void free_base()
     free(castle);
 }
 
+void init_enemy_base(int health, int mana)
+{
+    enemy_castle = malloc(sizeof(base));
+    enemy_castle->x = 17630 - castle->x;
+    enemy_castle->y = 9000 - castle->y;
+    enemy_castle->health = health;
+    enemy_castle->mana = mana;
+}
+
 // adds a unit to the proper array.
 void add_unit(unit* entity)
 {
     if(entity->type == 0)
     {
-        if(mobcounter == MAX_MOBS)
+        if(spidercounter == MAX_SPIDERS)
         {
-            fprintf(stderr, "too many mobs\n");
+            fprintf(stderr, "too many spiders\n");
             return ;
         }
-        mobs[mobcounter] = entity;
-        mobcounter++;
+        spiders[spidercounter] = entity;
+        spidercounter++;
     }
     else if(entity->type == 1)
     {
@@ -153,9 +202,277 @@ void add_unit(unit* entity)
     }
     else if(entity->type == 2)
     {
+        enemies[enemycounter] = entity;
+        enemycounter++;
         return ;
     }
 }
+
+// ==================
+
+unit *scan_entity(int entity_count)
+{
+    // Unique identifier
+    int id;
+    // 0=monster, 1=your hero, 2=opponent hero
+    int type;
+    // Position of this entity
+    int x;
+    int y;
+    // Ignore for this league; Count down until shield spell fades
+    int shield_life;
+    // Ignore for this league; Equals 1 when this entity is under a control spell
+    int is_controlled;
+    // Remaining health of this monster
+    int health;
+    // Trajectory of this monster
+    int vx;
+    int vy;
+    // 0=monster with no target yet, 1=monster targeting a base
+    int near_base;
+    // Given this monster's trajectory, is it a threat to 1=your base, 2=your opponent's base, 0=neither
+    int threat_for;
+    scanf("%d%d%d%d%d%d%d%d%d%d%d", &id, &type, &x, &y, &shield_life, &is_controlled, &health, &vx, &vy, &near_base, &threat_for);
+
+    int distance_to_base = distance(castle->x, castle->y, x, y);
+
+    unit* entity = init_unit(id, type, x, y, shield_life, is_controlled, health, vx, vy, near_base, threat_for, distance_to_base);
+    return entity;
+}
+
+void scan_base(int base_x, int base_y)
+{
+    // Your base health
+    int health;
+    // Ignore in the first league; Spend ten mana to cast a spell
+    int mana;
+    // SCANS FOR BOTH BASES.
+
+    // Base:
+    scanf("%d%d", &health, &mana);
+    init_base(base_x, base_y, health, mana);
+
+    // Enemy base:
+    scanf("%d%d", &health, &mana);
+    init_enemy_base(health, mana);
+
+}
+
+// ==================
+
+void print_spiders()
+{
+    fprintf(stderr, "\nspidercount: %d\n", spidercounter);
+    for(int i = 0; i < spidercounter; i++)
+    {
+        print_spider(i);
+    }
+    fprintf(stderr, "\n");
+}
+
+void print_spider(int index)
+{
+    unit *spider = spiders[index];
+
+    fprintf(stderr, "Spider id: %3d. X: %5d Y: %5d ", spider->id, spider->x, spider->y);
+    if(has_attackers(spider) > 0)
+    {
+        fprintf(stderr, "Spider attacked by: ");
+        for(int i = 0; i < 3; i++)
+        {
+            if(spider->attackers[i] != NULL)
+            {
+                fprintf(stderr, "%d ", spider->attackers[i]->id);
+            }
+        }
+    }
+    fprintf(stderr, "\n");
+}
+
+void print_heroes()
+{
+    for(int i = 0; i < herocounter; i++)
+    {
+        print_hero(i);
+    }
+    fprintf(stderr, "\n");
+}
+
+void print_hero(int index)
+{
+    unit *hero = heroes[index];
+    fprintf(stderr, "Hero id: %1d. X: %5d Y: %5d ", hero->id, hero->x, hero->y);
+    if(hero->target != NULL)
+    {
+        fprintf(stderr, "Hero target: %d", hero->target->id);
+    }
+    fprintf(stderr, "\n");
+}
+
+void print_enemies()
+{
+    for(int i = 0; i < enemycounter; i++)
+    {
+        print_enemy(i);
+    }
+    fprintf(stderr, "\n");
+}
+
+void print_enemy(int index)
+{
+    unit *enemy = enemies[index];
+    fprintf(stderr, "Enemy id: %1d. X: %5d Y: %5d ", enemy->id, enemy->x, enemy->y);
+    fprintf(stderr, "\n");
+}
+
+// ==================
+
+void add_target_to_hero(unit* target, unit* hero)
+{
+    if(target == NULL || hero == NULL)
+    {
+        if(target == NULL)
+            fprintf(stderr, "NULL target given to function add_target_to_hero");
+        if(hero == NULL)
+            fprintf(stderr, "NULL hero given to function add_target_to_hero");
+        return ;
+    }
+
+    hero->target = target;
+    target->attackers[target->attacker_count] = hero;
+    target->attacker_count++;
+}
+
+void remove_target_from_hero(unit* hero)
+{
+    if(hero == NULL)
+    {
+        fprintf(stderr, "NULL hero given to function remove_target_from_heroes");
+        return ;
+    }
+    if(hero->target)
+    {
+        for(int i = 0; i < 3; i++)
+        {
+            if(hero->target->attackers[i] == hero)
+            {
+                hero->target->attackers[i] = NULL;
+            }
+        }
+    }
+    hero->target = NULL;
+}
+
+// return the number of friendly heroes attacking this spider unit.
+int has_attackers(unit *spider)
+{
+    if(spider == NULL)
+    {
+        fprintf(stderr, "NULL spider given to function has_attackers");
+        return -1;
+    }
+    if(spider->type != 0)
+    {
+        fprintf(stderr, "Non-spider type given to has_attackers");
+        return -1;
+    }
+
+    int attackers = 0;
+    for(int i = 0; i < 3; i++)
+    {
+        if(spider->attackers[i] != NULL)
+        {
+            attackers++;
+        }
+    }
+    return attackers;
+}
+
+// Gets the closest spider to the base, that isn't already being attacked by another friendly hero.
+unit* get_closest_spider_to_base()
+{
+    int distance;
+    int closest_distance = 50000;
+    unit* target = NULL;
+    unit* spider;
+
+    for(int i = 0; i < spidercounter; i++)
+    {
+        spider = spiders[i];
+        distance = spider->distance_to_base;
+        if(distance < closest_distance && has_attackers(spider) == 0 && spider->threat_for != 2)
+        {
+            target = spider;
+            closest_distance = distance;
+        }
+    }
+    return target;
+}
+
+// Gets the closest spider to the hero, that isn't already targeting the enemy base.
+unit* get_closest_spider_to_hero(unit* hero)
+{
+    int distance;
+    int closest_distance = 50000;
+    unit* target = NULL;
+    unit* spider;
+
+    for(int i = 0; i < spidercounter; i++)
+    {
+        spider = spiders[i];
+        distance = distance_to_enemy(hero, spider);
+        if(distance < closest_distance && spider->threat_for != 2)
+        {
+            target = spider;
+            closest_distance = distance;
+        }
+    }
+    return target;
+}
+
+unit* get_closest_attacking_spider_enemy()
+{
+    int distance;
+    int closest_distance = 50000;
+    unit* target = NULL;
+    unit* spider;
+
+    for(int i = 0; i < spidercounter; i++)
+    {
+        spider = spiders[i];
+        distance = distance_to_enemy_base(spider);
+        if(distance < closest_distance && distance < 4500)
+        {
+            target = spider;
+            closest_distance = distance;
+        }
+    }
+    return target;
+}
+
+unit* get_enemy_hero()
+{
+    return enemies[0];
+}
+
+unit* get_enemy_hero_in_base()
+{
+    unit* enemy;
+    for(int i = 0; i < 3; i++)
+    {
+        enemy = enemies[i];
+        if(enemy != NULL)
+        {
+            if(enemy->distance_to_base < 5500)
+            {
+                return enemy;
+            }
+        }
+    }
+    return NULL;
+}
+
+// ==================
 
 // Calculates the distance between two points.
 int distance(int x1, int y1, int x2, int y2)
@@ -171,241 +488,327 @@ int distance(int x1, int y1, int x2, int y2)
     return distance;
 }
 
-// Find the 3 targets closest to the base and put them in the global targets array.
-void find_3_targets()
+int distance_to_target(unit *hero)
 {
-
+    return distance(hero->x, hero->y, hero->target->x, hero->target->y);
 }
 
-// Gets the closest target to the base, that isn't already being attacked by a friendly hero.
-unit* get_closest_target_to_base()
+int distance_to_enemy(unit* entity, unit* enemy)
 {
-    int distance;
-    int closest_distance = 50000;
-    unit* target = NULL;
-    unit* mob;
-
-    for(int i = 0; i < mobcounter; i++)
-    {
-        mob = mobs[i];
-        distance = mob->distance_to_base;
-        if(distance < closest_distance && has_attackers(mob) == 0)
-        {
-            target = mob;
-            closest_distance = distance;
-        }
-    }
-    return target;
+    return distance(entity->x, entity->y, enemy->x, enemy->y);
 }
 
-// return the number of friendly heroes attacking this mob unit.
-int has_attackers(unit *mob)
+int distance_to_enemy_base(unit* entity)
 {
-    if(mob == NULL)
-    {
-        fprintf(stderr, "NULL mob given to function has_attackers");
-        return -1;
-    }
-    if(mob->type != 0)
-    {
-        fprintf(stderr, "Non-mob type given to has_attackers... You fucked up!");
-        return -1;
-    }
-
-    int attackers = 0;
-    for(int i = 0; i < HERO_COUNT; i++)
-    {
-        if(mob->attackers[i] != NULL)
-        {
-            attackers++;
-        }
-    }
-    return attackers;
+    return distance(entity->x, entity->y, enemy_castle->x, enemy_castle->y);
 }
 
-void assign_target_to_hero(unit* target, unit* hero)
-{
-    if(target == NULL || hero == NULL)
-    {
-        if(target == NULL)
-            fprintf(stderr, "NULL target given to function assign_target_to_hero");
-        if(hero == NULL)
-            fprintf(stderr, "NULL hero given to function assign_target_to_hero");
-        return ;
-    }
-
-    hero->target = target;
-    target->attackers[hero->id] = hero;
-}
-
-void remove_target_from_hero(unit* hero)
-{
-    if(hero == NULL)
-    {
-        fprintf(stderr, "NULL hero given to function remove_target_from_heroes");
-        return ;
-    }
-
-    unit *target = hero->target;
-    if(target)
-    {
-        target->attackers[hero->id] = NULL;
-    }
-    hero->target = NULL;
-}
-
-void print_mobs()
-{
-    fprintf(stderr, "\nMobcount: %d\n", mobcounter);
-    for(int i = 0; i < mobcounter; i++)
-    {
-        print_mob(i);
-    }
-}
-
-void print_mob(int index)
-{
-    unit *mob = mobs[index];
-
-    fprintf(stderr, "Mob id: %3d. X: %5d Y: %5d ", mob->id, mob->x, mob->y);
-    if(has_attackers(mob) > 0)
-    {
-        fprintf(stderr, "Mob is attacked by hero(es): ");
-        for(int i = 0; i < HERO_COUNT; i++)
-        {
-            if(mob->attackers[i] != NULL)
-            {
-                fprintf(stderr, "%d ", mob->attackers[i]->id);
-            }
-        }
-    }
-    fprintf(stderr, "\n");
-}
-
-void print_heroes()
-{
-    for(int i = 0; i < herocounter; i++)
-    {
-        print_hero(i);
-    }
-}
-
-void print_hero(int index)
-{
-    unit *hero = heroes[index];
-        fprintf(stderr, "Hero id: %1d. X: %5d Y: %5d ", hero->id, hero->x, hero->y);
-        if(hero->target != NULL)
-        {
-            fprintf(stderr, "Hero target: %d", hero->target->id);
-        }
-        fprintf(stderr, "\n");
-}
+// ==================
 
 void move_to_base(unit *hero)
 {
-    int x = castle->x + 2000 * (hero->id+1);
-    int y = castle->y + (8000 - 2000 * (hero->id+1));
+    int x;
+    int y;
+
+    //Dirty stuff, fix this dude.
+    if(castle->x == 0)
+    {
+        x = 2500 * (hero->id + 1);
+        y = 10000 - 2500 * (hero->id + 1);
+    }
+    else
+    {
+        x = castle->x - 2500 * (hero->id + 1 - 3);
+        y = castle->y - (10000 - 2500 * (hero->id + 1 - 3));
+    }
 
     printf("MOVE %d %d\n", x, y);
 }
+
+void move_to_hero_target(unit* hero)
+{
+    printf("MOVE %d %d\n", hero->target->x, hero->target->y);
+}
+
+void move_to_target(unit* target)
+{
+    printf("MOVE %d %d\n", target->x, target->y);
+}
+
+void move_to_enemy_base()
+{
+    int x = enemy_castle->x;
+    int y = enemy_castle->y;
+
+    if(x == 0)
+    {
+        x += 3500;
+        y += 3500;
+    }
+    else {
+        x -= 3500;
+        y -= 3500;
+    }
+
+    printf("MOVE %d %d\n", x, y);
+}
+
+void move_to(int x, int y)
+{
+    printf("MOVE %d %d\n", x, y);
+}
+
+void patrol_enemy_perimeter(unit* hero)
+{
+    static int last_visited = 0;
+    int x1, x2, x3, y1, y2, y3, x, y;
+    if(castle->x == 0)
+    {
+        x1 = enemy_castle->x - 7500;
+        y1 = enemy_castle->y - 2500;
+
+        x2 = enemy_castle->x - 5000;
+        y2 = enemy_castle->y - 5000;
+
+        x3 = enemy_castle->x - 2500;
+        y3 = enemy_castle->y - 7500;
+    }
+    else {
+        x1 = enemy_castle->x + 7500;
+        y1 = enemy_castle->y + 2500;
+
+        x2 = enemy_castle->x + 5000;
+        y2 = enemy_castle->y + 5000;
+
+        x3 = enemy_castle->x + 2500;
+        y3 = enemy_castle->y + 7500;
+    }
+
+    if(last_visited % 3 == 0)
+    {
+        x = x1;
+        y = y1;
+    }
+    if(last_visited % 3 == 1)
+    {
+        x = x2;
+        y = y2;
+    }
+    if(last_visited % 3 == 2)
+    {
+        x = x3;
+        y = y3;
+    }
+
+    if(distance(hero->x, hero->y, x, y) < 500)
+    {
+        last_visited++;
+    }
+
+    printf("MOVE %d %d\n", x, y);
+}
+
+int cast_wind(unit* hero, unit* target, int x, int y)
+{
+    if(castle->mana < 10)
+        return 0;
+    if(distance_to_enemy(hero, target) > 1280)
+        return 0;
+    if(target->shield_life > 0)
+        return 0;
+
+    printf("SPELL WIND %d %d\n", x, y);
+    return 1;
+}
+
+int cast_shield(unit* hero, unit* target)
+{
+    if(castle->mana < 10)
+        return 0;
+    if(distance_to_enemy(hero, target) > 2200)
+        return 0;
+    if(target->shield_life > 0)
+        return 0;
+
+    printf("SPELL SHIELD %d\n", target->id);
+    return 1;
+}
+
+int cast_control(unit* hero, unit* target, int x, int y)
+{
+    if(castle->mana < 10)
+        return 0;
+    if(distance_to_enemy(hero, target) > 2200)
+        return 0;
+    if(target->shield_life > 0)
+        return 0;
+    if(target->is_controlled)
+        return 0;
+
+    printf("SPELL CONTROL %d %d %d\n", target->id, x, y);
+    return 1;
+}
+
+// ==================
 
 int main()
 {
     // The corner of the map representing your base
     int base_x;
     int base_y;
-
     scanf("%d%d", &base_x, &base_y);
+
     // Always 3
     int heroes_per_player;
     scanf("%d", &heroes_per_player);
 
-    mobs = malloc(sizeof(unit*) * MAX_MOBS);
+    // Initialize global arrays
+    spiders = malloc(sizeof(unit*) * MAX_SPIDERS);
     heroes = malloc(sizeof(unit*) * 3);
-    targets = malloc(sizeof(unit*) * 3);
+    enemies = malloc(sizeof(unit*) * 3);
 
-    // game loop
     while (1)
     {
-        mobcounter = 0;
+        // Increment turn counter
+        turn++;
+
+        // reset
+        spidercounter = 0;
         herocounter = 0;
-        targetcounter = 0;
+        enemycounter = 0;
 
-        // Your base health
-        int health;
-        // Ignore in the first league; Spend ten mana to cast a spell
-        int mana;
-        for (int i = 0; i < 2; i++)
-        {
-            scanf("%d%d", &health, &mana);
-        }
-        castle = init_base(base_x, base_y, health, mana);
+        // Scan base
+        scan_base(base_x, base_y);
 
-        // Amount of heros and monsters you can see
+        // Scan visible units
         int entity_count;
         scanf("%d", &entity_count);
         for (int i = 0; i < entity_count; i++)
         {
-            // Unique identifier
-            int id;
-            // 0=monster, 1=your hero, 2=opponent hero
-            int type;
-            // Position of this entity
-            int x;
-            int y;
-            // Ignore for this league; Count down until shield spell fades
-            int shield_life;
-            // Ignore for this league; Equals 1 when this entity is under a control spell
-            int is_controlled;
-            // Remaining health of this monster
-            int health;
-            // Trajectory of this monster
-            int vx;
-            int vy;
-            // 0=monster with no target yet, 1=monster targeting a base
-            int near_base;
-            // Given this monster's trajectory, is it a threat to 1=your base, 2=your opponent's base, 0=neither
-            int threat_for;
-            scanf("%d%d%d%d%d%d%d%d%d%d%d", &id, &type, &x, &y, &shield_life, &is_controlled, &health, &vx, &vy, &near_base, &threat_for);
-
-            int distance_to_base = distance(base_x, base_y, x, y);
-            unit* entity = init_unit(id, type, x, y, shield_life, is_controlled, health, vx, vy, near_base, threat_for, distance_to_base);
+            unit *entity = scan_entity(entity_count);
             add_unit(entity);
         }
+        // Hero actions
+        defender_behavior(heroes[0]);
+        attacker_behavior(heroes[1]);
+        collector_behavior(heroes[2]);
 
-        print_mobs();
-        fprintf(stderr, "\n");
+        // debug
+        print_spiders();
         print_heroes();
-
-        for (int i = 0; i < heroes_per_player; i++)
-        {
-            unit *hero = heroes[i];
-            unit *target;
-
-            remove_target_from_hero(hero);
-
-            if(mobcounter != 0)
-            {
-                target = get_closest_target_to_base();
-                if(target == NULL)
-                {
-                    move_to_base(hero);
-                    // target = heroes[0]->target;
-                    continue ;
-                }
-
-                assign_target_to_hero(target, hero);
-                printf("MOVE %d %d\n", hero->target->x - 340, hero->target-> y - 340);
-            }
-            else
-            {
-                move_to_base(hero);
-            }
-            // In the first league: MOVE <x> <y> | WAIT; In later leagues: SPELL <spellParams>;
-        }
+        print_enemies();
 
         free_units();
         free_base();
+        free(enemy_castle);
     }
     return 0;
 }
+
+void attacker_behavior(unit* hero)
+{
+    unit* spider;
+    if(turn < 100)
+    {
+        defender_behavior(hero);
+        return;
+    }
+    spider = get_closest_spider_to_hero(hero);
+    if(turn > 140)
+    {
+        if(castle->mana >= 90)
+        {
+            if(cast_control(hero, spider, enemy_castle->x, enemy_castle->y))
+                return;
+        }
+    }
+    if(turn > 175)
+    {
+        spider = get_closest_attacking_spider_enemy();
+        if(spider != NULL)
+        {
+            if(castle->mana > 50)
+            {
+                if(cast_shield(hero, spider))
+                    return;
+            }
+        }
+        move_to_enemy_base();
+        return;
+    }
+    patrol_enemy_perimeter(hero);
+}
+
+void defender_behavior(unit* hero)
+{
+    unit* target;
+    target = get_closest_spider_to_base();
+    if(target != NULL)
+    {
+        add_target_to_hero(target, hero);
+        if(target->distance_to_base < 5000)
+        {
+            if(cast_wind(hero, target, enemy_castle->x, enemy_castle->y))
+                return;
+        }
+        if(turn > 90)
+        {
+            if(castle->mana >= 50 && target->distance_to_base > 5000)
+            {
+                if(cast_control(hero, target, enemy_castle->x, enemy_castle->y))
+                    return;
+            }
+        }
+        // Default target action
+        move_to_hero_target(hero);
+        return ;
+    }
+    // Default action
+    move_to_base(hero);
+}
+
+// Will try to herd spiders into a corner, then control them all towards the opponent for one big wave.
+// Should only collect spiders with the appropriate vector.
+void collector_behavior(unit* hero)
+{
+    // unit* enemy;
+
+    // enemy = get_enemy_hero_in_base();
+    // // Enemy spotted.
+    // if(enemy != NULL)
+    // {
+    //     if(turn > 55 && distance_to_enemy(hero, enemy) <= 1280)
+    //     {
+    //         if(castle->mana >= 50 && hero->shield_life == 0)
+    //         {
+    //             if(cast_shield(hero, hero))
+    //                 return ;
+    //         }
+    //     }
+    // }
+    // Default action
+    defender_behavior(hero);
+}
+
+// Chases enemy heroes close to our base to
+void chaser_behavior(unit* hero)
+{
+
+}
+
+// Mwuhahaha
+// void abductor_behavior()
+// {
+//         if(turn < 55 && (enemy->vx > 0 || enemy->vy > 0))
+//         {
+//             if(distance(hero->x, hero->y, enemy->x, enemy->y) > 1200)
+//             {
+//                 move_to_target(enemy);
+//                 return ;
+//             }
+//             else
+//             {
+//                 if(cast_wind(castle->x, castle->y)) return;
+//             }
+//         }
+// }
