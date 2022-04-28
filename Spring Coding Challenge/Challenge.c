@@ -16,6 +16,7 @@ int CONTROL_CAST_RANGE = 2200;
 int SHIELD_CAST_RANGE = 2200;
 int WIND_RANGE = 2200;
 int BASE_DETECTION_RANGE = 5000;
+int HERO_ATTACK_RANGE = 800;
 
 //UNIT STRUCTS
 typedef struct s_unit {
@@ -150,19 +151,19 @@ t_unit* init_unit(int id, int type, int x, int y, int shield_life, int is_contro
 	unit->distance_to_base = distance_to_base;
 
 	// Spider
-    for(int i = 0; i < 3; i++)
-    {
-        unit->attackers[i] = NULL;
-    }
-    unit->attacker_count = 0;
+	for(int i = 0; i < 3; i++)
+	{
+		unit->attackers[i] = NULL;
+	}
+	unit->attacker_count = 0;
 
-    if(type == 0)
+	if(type == 0)
 	{
 		unit->speed = 400;
 	}
 
 	// Hero
-    unit->target = NULL;
+	unit->target = NULL;
 	if(type == 1 || type == 2)
 	{
 		unit->speed = 800;
@@ -227,6 +228,20 @@ void add_unit(t_unit* unit)
 	}
 }
 
+// =================
+// Sort
+
+int cmpdist(const void* a, const void* b)
+{
+    t_unit* s1 = *((t_unit**)a);
+    t_unit* s2 = *((t_unit**)b);
+
+	int a_dist = s1->distance_to_base;
+	int b_dist = s2->distance_to_base;
+
+	return a_dist - b_dist;
+}
+
 // ==================
 
 t_unit* scan_entity()
@@ -238,9 +253,9 @@ t_unit* scan_entity()
 	// Position of this entity
 	int x;
 	int y;
-	// Ignore for this league; Count down until shield spell fades
+	// Count down until shield spell fades
 	int shield_life;
-	// Ignore for this league; Equals 1 when this entity is under a control spell
+	// Equals 1 when this entity is under a control spell
 	int is_controlled;
 	// Remaining health of this monster
 	int health;
@@ -262,7 +277,7 @@ void scan_base(int base_x, int base_y)
 {
 	// Your base health
 	int health;
-	// Ignore in the first league; Spend ten mana to cast a spell
+	// Spend ten mana to cast a spell
 	int mana;
 	// SCANS FOR BOTH BASES.
 
@@ -291,7 +306,7 @@ void print_spider(int index)
 {
 	t_unit* spider = spiders[index];
 
-	fprintf(stderr, "Spider id: %3d. X: %5d Y: %5d ", spider->id, spider->x, spider->y);
+	fprintf(stderr, "Spider id: %3d. X: %5d Y: %5d Dist: %5d", spider->id, spider->x, spider->y, spider->distance_to_base);
 	if(has_attackers(spider) > 0)
 	{
 		fprintf(stderr, "Spider attacked by: ");
@@ -338,8 +353,8 @@ void print_enemies()
 void print_enemy(int index)
 {
 	t_unit* enemy = enemies[index];
-    if(enemy == NULL)
-        return;
+	if(enemy == NULL)
+		return;
 	fprintf(stderr, "Enemy id: %1d. X: %5d Y: %5d ", enemy->id, enemy->x, enemy->y);
 	fprintf(stderr, "\n");
 }
@@ -452,7 +467,7 @@ t_unit* get_closest_spider_to_hero(t_unit* hero)
 t_unit* get_closest_spider_attacking_enemy()
 {
 	int distance;
-	int closest_distance = 50000;
+	int closest_distance = 50000; //Arbitrary
 	t_unit* target = NULL;
 	t_unit* spider;
 
@@ -533,7 +548,7 @@ void move_to_base(t_base* base, char* message)
 
 void move_to_unit(t_unit* destination, char* message)
 {
-    move_to(destination->x, destination->y, message);
+	move_to(destination->x, destination->y, message);
 }
 
 void move_to(int x, int y, char* message)
@@ -544,6 +559,16 @@ void move_to(int x, int y, char* message)
 		return;
 	}
 	printf("MOVE %d %d %s\n", x, y, message);
+}
+
+void intercept(t_unit* hero, t_unit* spider, char* message)
+{
+    int x, y;
+
+    int turns_spider_reach_base = (spider->distance_to_base - 1) / spider->speed + 1; //(-1)+1 deals with rounding errors. A distance of 399 should give 1, not zero. But 400 should also give 1. 401 should give 2.
+    int turns_hero_reach_base = (hero->distance_to_base - 1) / hero->speed + 1;
+
+    move_to(x, y, message);
 }
 
 // Formation
@@ -584,45 +609,63 @@ void patrol_perimeter(t_unit* hero)
 void patrol_enemy_perimeter(t_unit* hero)
 {
 	static int last_visited = 0;
-	int x1, x2;//, x3;
-	int y1, y2;//, y3;
+	int x1, x2, x3;
+	int y1, y2, y3;
 	int x, y;
 
 	if(base->x == 0)
 	{
-		x1 = enemy_base->x - 7500;
-		y1 = enemy_base->y - 2500;
+		x1 = enemy_base->x - 5000;
+		y1 = enemy_base->y - 1000;
 
-		x2 = enemy_base->x - 5000;
-		y2 = enemy_base->y - 5000;
+		x2 = enemy_base->x - 4500;
+		y2 = enemy_base->y - 4500;
+
+        x3 = enemy_base->x - 1000;
+		y3 = enemy_base->y - 5000;
 	}
 	else
 	{
-		x1 = enemy_base->x + 7500;
-		y1 = enemy_base->y + 2500;
+		x1 = enemy_base->x + 5000;
+		y1 = enemy_base->y + 0;
 
-		x2 = enemy_base->x + 5000;
-		y2 = enemy_base->y + 5000;
+		x2 = enemy_base->x + 4500;
+		y2 = enemy_base->y + 4500;
 
+        x3 = enemy_base->x + 0;
+		y3 = enemy_base->y + 5000;
 	}
-	if(last_visited % 2 == 0)
+	if(last_visited % 3 == 0)
 	{
 		x = x1;
 		y = y1;
 	}
-	if(last_visited % 2 == 1)
+	if(last_visited % 3 == 1)
 	{
 		x = x2;
 		y = y2;
 	}
+    if(last_visited % 3 == 2)
+	{
+		x = x3;
+		y = y3;
+	}
 
 	char *message;
-	if(last_visited % 2 == 0)
-		message = "0";
-	else
-		message = "1";
+    if(last_visited % 3 == 0)
+    {
+        message = "0";
+    }
+    else if(last_visited % 3 == 1)
+    {
+        message = "1";
+    }
+    else if(last_visited % 3 == 2)
+    {
+        message = "1";
+    }
 
-	if(distance(hero->x, hero->y, x, y) == 0)
+	if(distance(hero->x, hero->y, x, y) <= 200)
 		last_visited++;
 	move_to(x, y, message);
 }
@@ -631,7 +674,7 @@ void patrol_enemy_perimeter(t_unit* hero)
 
 int cast_wind(t_unit* hero, t_unit* target, int x, int y, char* message)
 {
-	if(distance_unit_unit(hero, target) >= 1280)
+	if(distance_unit_unit(hero, target) >= WIND_CAST_RANGE)
 		return 0;
 
 	return cast("WIND", hero, target, x, y, message);
@@ -639,7 +682,7 @@ int cast_wind(t_unit* hero, t_unit* target, int x, int y, char* message)
 
 int cast_shield(t_unit* hero, t_unit* target, char* message)
 {
-	if(distance_unit_unit(hero, target) >= 2200)
+	if(distance_unit_unit(hero, target) >= SHIELD_CAST_RANGE)
 		return 0;
 	if(target->type == 0 && target->threat_for == 1)
 		return 0;
@@ -649,7 +692,7 @@ int cast_shield(t_unit* hero, t_unit* target, char* message)
 
 int cast_control(t_unit* hero, t_unit* target, int x, int y, char* message)
 {
-	if(distance_unit_unit(hero, target) >= 2200)
+	if(distance_unit_unit(hero, target) >= CONTROL_CAST_RANGE)
 		return 0;
 
 	return cast("CONTROL", hero, target, x, y, message);
@@ -657,10 +700,12 @@ int cast_control(t_unit* hero, t_unit* target, int x, int y, char* message)
 
 int cast(char* spell, t_unit* hero, t_unit* target, int x, int y, char* message)
 {
-    if(base->mana < 10)
-        return 0;
-    if(target->shield_life > 0)
-        return 0;
+	if(base->mana < 10)
+		return 0;
+	if(target->shield_life > 0)
+		return 0;
+
+    base->mana -= 10;
 
 	if(strcmp(spell, "WIND") == 0)
 		return printf("SPELL WIND %d %d %s \n", x, y, message);
@@ -694,10 +739,10 @@ int main()
 		// Increment turn counter
 		turn++;
 
-        // Reset global arrays
-        bzero(spiders, sizeof(t_unit*) * MAX_SPIDERS);
-        bzero(heroes, sizeof(t_unit*) * 3);
-        bzero(enemies, sizeof(t_unit*) * 3);
+		// Reset global arrays
+		bzero(spiders, sizeof(t_unit*) * MAX_SPIDERS);
+		bzero(heroes, sizeof(t_unit*) * 3);
+		bzero(enemies, sizeof(t_unit*) * 3);
 
 		// Reset unit counters
 		spidercounter = 0;
@@ -714,6 +759,11 @@ int main()
 		{
 			add_unit(scan_entity());
 		}
+
+		// t_unit** spiders_sorted_distance = calloc(sizeof(t_unit*) * MAX_SPIDERS, sizeof(t_unit*));
+        // memcpy(&spiders_sorted_distance, &spiders, sizeof(spiders));
+		qsort(spiders, spidercounter, sizeof(t_unit*), cmpdist);
+
 		// Hero actions
 		goalkeeper_behavior(heroes[0]);
 		defender_behavior(heroes[1]);
@@ -733,20 +783,20 @@ int main()
 
 void attacker_behavior(t_unit* hero)
 {
-	// if(turn < 100)
+	if(turn < 100)
+	{
+		defender_behavior(hero);
+		return ;
+	}
+
+	// t_unit* target = get_closest_spider_to_base(enemy_base);
+	// add_target_to_hero(target, hero);
+
+	// if(target == NULL)
 	// {
-	// 	defender_behavior(hero);
-	// 	return ;
+	//     patrol_enemy_perimeter(hero);
+	//     return ;
 	// }
-
-    // t_unit* target = get_closest_spider_to_base(enemy_base);
-    // add_target_to_hero(target, hero);
-
-    // if(target == NULL)
-    // {
-    //     patrol_enemy_perimeter(hero);
-    //     return ;
-    // }
 	// if(distance_unit_unit(hero, target) < 1000)
 	// {
 	// 	patrol_enemy_perimeter(hero);
@@ -761,68 +811,58 @@ void attacker_behavior(t_unit* hero)
 	// 			return ;
 	// 	}
 	// }
-	// if(turn > 175)
-	// {
-	// 	target = get_closest_spider_attacking_enemy();
-	// 	if(target != NULL)
-	// 	{
-	// 		if(base->mana > 100)
-	// 		{
-	// 			if(cast_shield(hero, target, ""))
-	// 				return ;
-	// 		}
+	if(turn > 150)
+	{
+		t_unit* target = get_closest_spider_attacking_enemy();
+		if(target != NULL)
+		{
+			if(base->mana > 50)
+			{
+				if(cast_shield(hero, target, ""))
+					return ;
+			}
 
-	// 	}
-	// 	move_to_base(enemy_base, "");
-	// 	return;
-	// }
-	// patrol_enemy_perimeter(hero);
-    defender_behavior(hero);
-    return ;
+		}
+		// move_to_base(enemy_base, "");
+		// return;
+	}
+	patrol_enemy_perimeter(hero);
+	return ;
 }
 
 void goalkeeper_behavior(t_unit* hero)
 {
-    int AVOID_RANGE = BASE_DETECTION_RANGE + CONTROL_CAST_RANGE;
-    t_unit* enemy_hero = get_enemy_hero_near_base(AVOID_RANGE);
+	int AVOID_RANGE = BASE_DETECTION_RANGE + CONTROL_CAST_RANGE;
+	t_unit* enemy_hero = get_enemy_hero_near_base(AVOID_RANGE);
 
-    if(!enemy_hero)
-    {
-        defender_behavior(hero);
-        return ;
-    }
+	if(!enemy_hero)
+	{
+		defender_behavior(hero);
+		return ;
+	}
 
-    fprintf(stderr, "enemy found: %d", enemy_hero->id);
+	fprintf(stderr, "enemy found: %d", enemy_hero->id);
 
-    if(distance_unit_unit(hero, enemy_hero) < CONTROL_CAST_RANGE)
-    {
-        if(hero->shield_life == 0)
-        {
-            if(cast_shield(hero, hero, "protec0"))
-                return ;
-        }
-        if(base->mana > 100)
-        {
-            if(cast_control(hero, enemy_hero, enemy_base->x, enemy_base->y, "Shoo!"))
-                return ;
-        }
-    }
+	if(distance_unit_unit(hero, enemy_hero) < CONTROL_CAST_RANGE)
+	{
+		if(base->mana > 100)
+		{
+			if(cast_control(hero, enemy_hero, enemy_base->x, enemy_base->y, "Shoo!"))
+				return ;
+		}
+	}
 
-    defender_behavior(hero);
-    return ;
+	defender_behavior(hero);
+	return ;
 }
 
 void defender_behavior(t_unit* hero)
 {
-    if(controlled(hero))
-    {
-        return ;
-    }
 
 	t_unit* spider;
 
 	spider = get_closest_spider_to_base(base);
-	if(spider == NULL)
+	if(spider == NULL || spider->distance_to_base > 9000)
 	{
 		spread_formation(hero, "");
 		return ;
@@ -831,12 +871,12 @@ void defender_behavior(t_unit* hero)
 
 	int hits_to_kill_spider = spider->health / 2;
 	int hero_behind_spider = spider->distance_to_base > hero->distance_to_base;
-	int dtt = distance_unit_unit(hero, hero->target);
-	int turns_to_reach_spider = dtt / hero->speed - 1;
+	int dtt = distance_unit_unit(hero, spider);
+	int turns_to_reach_spider = dtt / hero->speed;
 	int turns_to_kill_spider = spider->health / 2;
-	int turns_to_reach_base = spider->distance_to_base / spider->speed;
-	int turns_to_blow_range = (dtt - 1280) / hero->speed - 1;
-	int spider_will_reach_base_before_death = (spider->threat_for == 1 && turns_to_reach_base <= hits_to_kill_spider + 5);
+	int turns_to_reach_base = (spider->distance_to_base - 1) / spider->speed + 1;
+	int turns_to_blow_range = (dtt - WIND_CAST_RANGE) / hero->speed;
+	int spider_will_reach_base_before_death = (spider->threat_for == 1 && turns_to_reach_base <= hits_to_kill_spider + 1);
 
 	// if(turns_to_blow_range > turns_to_reach_base)
 	// {
@@ -847,13 +887,21 @@ void defender_behavior(t_unit* hero)
 	// }
 	if(spider_will_reach_base_before_death)
 	{
-        int distance_to_hero = distance_unit_unit(spider, hero);
-		if(cast_wind(hero, spider, enemy_base->x, enemy_base->y, "YEET"))
+		if(cast_wind(hero, spider, 17630, 500, "YEET"))
 			return ;
+	}
+    if(turn > 50 && spider->distance_to_base < 6500)
+    {
+        if(cast_control(hero, spider, enemy_base->x, enemy_base->y, "Get'em"))
+            return ;
+    }
+	if(controlled(hero))
+	{
+		return ;
 	}
 	if(turn > 90)
 	{
-		if(base->mana >= 300 && spider->distance_to_base > 4998 && spider->threat_for != 2)
+		if(base->mana >= 100 && spider->distance_to_base >= 5000 && spider->threat_for != 2)
 		{
 			if(cast_control(hero, spider, enemy_base->x, enemy_base->y, "Go!"))
 				return ;
@@ -886,7 +934,7 @@ void collector_behavior(t_unit* hero)
 	// }
 	// Default action
 	defender_behavior(hero);
-    return ;
+	return ;
 }
 
 // Chases enemy heroes close to our base to
@@ -915,45 +963,45 @@ void chaser_behavior(t_unit* hero)
 // Choice of implementation requires a variable for each hero. Fix this?!
 int controlled(t_unit* hero)
 {
-    static int was_controlled1 = 0;
-    static int was_controlled2 = 0;
-    static int was_controlled3 = 0;
+	static int was_controlled1 = 0;
+	static int was_controlled2 = 0;
+	static int was_controlled3 = 0;
 
-    if(hero->id == 0 || hero->id == 3)
-    {
-        if(hero->is_controlled)
-        {
-            was_controlled1++;
-        }
-        if(was_controlled1)
-        {
-            return cast_shield(hero, hero, "No.");
-        }
-    }
+	if(hero->id == 0 || hero->id == 3)
+	{
+		if(hero->is_controlled)
+		{
+			was_controlled1++;
+		}
+		if(was_controlled1)
+		{
+			return cast_shield(hero, hero, "No.");
+		}
+	}
 
-    if(hero->id == 1 || hero->id == 4)
-    {
-        if(hero->is_controlled)
-        {
-            was_controlled2++;
-        }
-        if(was_controlled2)
-        {
-            return cast_shield(hero, hero, "No.");
-        }
-    }
+	if(hero->id == 1 || hero->id == 4)
+	{
+		if(hero->is_controlled)
+		{
+			was_controlled2++;
+		}
+		if(was_controlled2)
+		{
+			return cast_shield(hero, hero, "No.");
+		}
+	}
 
-    if(hero->id == 2 || hero->id == 5)
-    {
-        if(hero->is_controlled)
-        {
-            was_controlled3++;
-        }
-        if(was_controlled3)
-        {
-            return cast_shield(hero, hero, "No.");
-        }
-    }
+	if(hero->id == 2 || hero->id == 5)
+	{
+		if(hero->is_controlled)
+		{
+			was_controlled3++;
+		}
+		if(was_controlled3)
+		{
+			return cast_shield(hero, hero, "No.");
+		}
+	}
 
-    return 0;
+	return 0;
 }
