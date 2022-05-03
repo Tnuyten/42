@@ -38,8 +38,8 @@ int	ft_do_s(va_list args)
 
 	s = va_arg(args, char *);
 	if (s == NULL)
-		return (ft_putstr_fd("(null)", 1));
-	return (ft_putstr_fd(s, 1));
+		return (ft_printf_putstr_fd("(null)", 1));
+	return (ft_printf_putstr_fd(s, 1));
 }
 
 int	ft_do_p(va_list args)

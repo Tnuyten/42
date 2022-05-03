@@ -1,31 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sort_queue.h                                       :+:      :+:    :+:   */
+/*   sort_queue_helpers_more.h                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/13 18:44:05 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/04/15 20:16:35 by tnuyten          ###   ########.fr       */
+/*   Created: 2022/04/15 19:12:44 by tnuyten           #+#    #+#             */
+/*   Updated: 2022/05/03 17:05:26 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SORT_QUEUE_H
-# define SORT_QUEUE_H
+#ifndef SORT_QUEUE_HELPERS_MORE_H
+# define SORT_QUEUE_HELPERS_MORE_H
 
-# include "sort_queue_helpers.h"
 # include "../queue/queue.h"
-# include "../queue/queue_operations_push.h"
-# include "../queue/queue_operations_swap.h"
 # include "../queue/queue_operations_rotate.h"
 # include "../queue/queue_operations_reverse_rotate.h"
 # include "../ft_printf/ft_printf.h"
-# include "../sort/sort_queue_helpers_more.h"
 
-void	sort(t_queue **a, t_queue **b);
-void	radix_sort(t_queue **a, t_queue **b);
-void	sort_three(t_queue **a);
-void	sort_small(t_queue **a, t_queue **b);
-void	smallest_first(t_queue **a, t_queue **b);
+int		find_insert_location(t_queue **a, t_queue *target);
+void	rotate_efficiently(t_queue **a, int index);
+int get_largest_node_lower_than_target(t_queue **a, t_queue *target);
 
 #endif

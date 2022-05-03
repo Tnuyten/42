@@ -6,13 +6,11 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 15:28:46 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/04/14 15:33:57 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/04/15 19:17:13 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sort_queue_helpers.h"
-
-#include <stdio.h> //#TODO REMOVE
 
 int	binary_size(int num)
 {
@@ -55,10 +53,7 @@ int	is_sorted(t_queue *root)
 	int	num;
 
 	if (!root)
-	{
-		printf("%s\n", "root is empty");
 		return (1);
-	}
 	while (root->next != NULL)
 	{
 		num = root->number;

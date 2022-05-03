@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 17:35:44 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/04/14 15:14:29 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/05/02 19:57:14 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,23 @@ int	queue_index(t_queue **root, t_queue *target)
 		root_top = root_top->next;
 	}
 	return (-1);
+}
+
+t_queue* queue_get_node(t_queue **root, int num)
+{
+	t_queue	*root_top;
+	int		index;
+
+	root_top = root[0];
+	index = 0;
+	while (root_top != NULL)
+	{
+		if (root_top->number == num)
+			return (root_top);
+		index++;
+		root_top = root_top->next;
+	}
+	return (NULL);
 }
 
 t_queue	*queue_copy(t_queue *root)

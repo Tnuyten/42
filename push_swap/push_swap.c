@@ -6,13 +6,14 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/26 15:13:08 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/04/14 17:39:54 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/05/03 17:51:28 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-#include <stdio.h> //#TODO REMOVE
+#include "sort/sort_queue_helpers_more.h"
+
 #include "debug.h"
 
 int	main(int argc, char **argv)
@@ -23,17 +24,21 @@ int	main(int argc, char **argv)
 	b = NULL;
 	if (argc < 2)
 	{
-		printf("%s\n", "Error - No arguments provided");
+		ft_printf("%s\n", "Error - No arguments provided");
 		return (1);
 	}
 	parse_input(&a, argc, argv);
 	if (has_duplicates(a))
 	{
-		printf("%s\n", "Error - Duplicate number found.");
+		ft_printf("%s\n", "Error - Duplicate number found.");
 		queue_clear(&a);
 		return (1);
 	}
+	// print_queue("a", a);
+	// print_queue("b", b);
 	sort(&a, &b);
+	// print_queue("a",a);
+	// print_queue("b",b);
 	queue_clear(&a);
 	queue_clear(&b);
 	return (0);

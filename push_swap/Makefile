@@ -6,7 +6,7 @@
 #    By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/11 14:33:40 by tnuyten           #+#    #+#              #
-#    Updated: 2022/04/14 17:41:23 by tnuyten          ###   ########.fr        #
+#    Updated: 2022/04/15 21:09:45 by tnuyten          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,9 @@ SRCS =				push_swap.c \
 					queue/queue_operations_rotate.c \
 					queue/queue_operations_reverse_rotate.c \
 					sort/sort_queue.c \
-					sort/sort_queue_helpers.c
+					sort/sort_queue_helpers.c \
+					sort/sort_queue_helpers_more.c \
+					debug.c
 
 FILES = $(SRCS)
 

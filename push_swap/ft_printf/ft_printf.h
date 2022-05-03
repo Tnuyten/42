@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 13:57:17 by tnuyten           #+#    #+#             */
-/*   Updated: 2021/11/18 16:19:29 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/04/15 20:13:07 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ int		ft_do_di(va_list args);
 int		ft_do_u(va_list args);
 int		ft_do_x(va_list args, int caser);
 
-int		ft_putchar_fd(char c, int fd);
-int		ft_putnbr_fd(int n, int fd);
-size_t	ft_strlen(const char *c);
-int		ft_putstr_fd(char *s, int fd);
-int		ft_putnbr_u_fd(unsigned int n, int fd);
+int		ft_printf_putchar_fd(char c, int fd);
+int		ft_printf_putnbr_fd(int n, int fd);
+size_t	ft_printf_strlen(const char *c);
+int		ft_printf_putstr_fd(char *s, int fd);
+int		ft_printf_putnbr_u_fd(unsigned int n, int fd);
 
 #endif

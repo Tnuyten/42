@@ -1,22 +1,19 @@
-#include "queue/queue.h"
+#include "debug.h"
 
-#include <stdio.h> //#TODO REMOVE
-
-//#TODO fix dis with ft_printf.
 void	print_queue(char *name, t_queue *queue)
 {
-	printf("Queue: %s[", name);
+	ft_printf("Queue: %s[", name);
 	if (queue == NULL)
 	{
-		printf("%s\n", "empty]");
+		ft_printf("%s\n", "empty]");
 		return ;
 	}
 	while (queue->next != NULL)
 	{
-		printf("%d - ", queue->number);
+		ft_printf("%d - ", queue->number);
 		queue = queue->next;
 	}
-	printf("%d]\n", queue->number);
+	ft_printf("%d]\n", queue->number);
 }
 
 //https://stackoverflow.com/questions/38164849/sorting-a-queue-in-ascending-order-in-c-using-two-queues
