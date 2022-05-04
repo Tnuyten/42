@@ -6,15 +6,11 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/26 15:13:08 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/05/03 17:51:28 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/05/04 12:26:06 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-#include "sort/sort_queue_helpers_more.h"
-
-#include "debug.h"
 
 int	main(int argc, char **argv)
 {
@@ -24,7 +20,7 @@ int	main(int argc, char **argv)
 	b = NULL;
 	if (argc < 2)
 	{
-		ft_printf("%s\n", "Error - No arguments provided");
+		ft_printf("%s\n", "Error - No arguments provided.");
 		return (1);
 	}
 	parse_input(&a, argc, argv);
@@ -34,22 +30,19 @@ int	main(int argc, char **argv)
 		queue_clear(&a);
 		return (1);
 	}
-	// print_queue("a", a);
-	// print_queue("b", b);
 	sort(&a, &b);
-	// print_queue("a",a);
-	// print_queue("b",b);
 	queue_clear(&a);
 	queue_clear(&b);
 	return (0);
 }
 
+//#TODO improve.. this won't work for "1 2 3 4 5" ... but it doesn't have to?!
 int	parse_input(t_queue **a, int argc, char **argv)
 {
 	int		number;
 
 	*a = queue_new(ft_atoi(argv[argc-- - 1]));
-	while (argc > 1) //#TODO improve.. this won't work for "1 2 3 4 5" ... but it doesn't have to?!
+	while (argc > 1)
 	{
 		number = ft_atoi(argv[argc-- - 1]);
 		queue_addfront(a, queue_new(number));

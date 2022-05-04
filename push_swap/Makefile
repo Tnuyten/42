@@ -6,20 +6,20 @@
 #    By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/11 14:33:40 by tnuyten           #+#    #+#              #
-#    Updated: 2022/04/15 21:09:45 by tnuyten          ###   ########.fr        #
+#    Updated: 2022/05/04 12:26:38 by tnuyten          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS =				push_swap.c \
 					queue/queue.c \
+					queue/queue_get.c \
 					queue/queue_operations_push.c \
 					queue/queue_operations_swap.c \
 					queue/queue_operations_rotate.c \
 					queue/queue_operations_reverse_rotate.c \
 					sort/sort_queue.c \
 					sort/sort_queue_helpers.c \
-					sort/sort_queue_helpers_more.c \
-					debug.c
+					sort/sort_queue_helpers_more.c
 
 FILES = $(SRCS)
 

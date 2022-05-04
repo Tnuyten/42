@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 15:19:46 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/04/14 15:21:16 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/05/04 12:43:00 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define QUEUE_OPERATIONS_REVERSE_ROTATE_H
 
 # include "queue.h"
+# include "queue_get.h"
 
 void	rra(t_queue **a);
 void	rrb(t_queue **b);
