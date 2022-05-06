@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 15:28:43 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/05/04 12:41:28 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/05/06 15:31:33 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,11 +86,11 @@ void	sort_three(t_queue **a)
 	int	second;
 	int	third;
 
+	if (is_sorted(a[0]))
+		return ;
 	first = a[0]->number;
 	second = a[0]->next->number;
 	third = a[0]->next->next->number;
-	if (is_sorted(a[0]))
-		return ;
 	if (first > second && second > third)
 	{
 		sa(a);
