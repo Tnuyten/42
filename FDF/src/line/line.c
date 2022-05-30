@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 20:28:05 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/05/30 14:14:05 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/05/30 18:42:18 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,24 +139,13 @@ void image_draw_line(t_mlx mlx, t_coord start, t_coord end, int color)
 {
 	int dx;
 	int dy;
-	int min = start.x + start.y * mlx.map->width;
-	int max = end.x + end.y * mlx.map->width;
 
-
-	if(min < 0 || max >= WIDTH * HEIGHT)
-	{
-		printf("%d %d\n", min, max);
-		return;
-	}
 	if(start.x > WIDTH || end.x > WIDTH || start.y > HEIGHT || end.y > HEIGHT)
 	{
-		printf("%d %d\n", 3, 3);
 		return;
 	}
 	if(start.x < 0 || end.x < 0 || start.y < 0 || end.y < 0)
 	{
-		printf("%d %d\n", 4, 4);
-
 		return;
 	}
 

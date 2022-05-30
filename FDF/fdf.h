@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 17:22:58 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/05/27 16:03:50 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/05/30 18:17:52 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,11 @@ typedef struct s_map
 }	t_map;
 
 typedef struct s_mlx {
-	void		*mlx;
-	void		*win;
 	t_map		*map;
 	t_mlx_image	img;
+	t_mlx_image swap_img;
+	void		*mlx;
+	void		*win;
 }	t_mlx;
 
 typedef struct s_coord {
@@ -72,7 +73,7 @@ int		close_window_keypress(int keycode, t_mlx *mlx);
 int		close_window_button(t_mlx *mlx);
 void	image_pixel_put(t_mlx_image img, int x, int y, int color);
 t_mlx	*init_mlx();
-int		max(int a, int b);
-int		min(int a, int b);
+void	free_all(t_mlx *mlx);
+t_coord *draw_map_get_iso(t_mlx mlx, int i, int j, int direction);
 
 #endif
