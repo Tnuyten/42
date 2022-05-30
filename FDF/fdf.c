@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 17:22:17 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/05/19 20:07:50 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/05/30 14:01:44 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,42 @@ https://github.com/codam-coding-college/MLX42/wiki/Images
 #include "fdf.h"
 #include <stdio.h>
 #include <math.h>
-# include "line/line.h"
+# include "src/line/line.h"
+# include "src/iso/iso.h"
+# include "src/map/map.h"
 
-# define RED 0x00FF0000
-# define GREEN 0x0000FF00
-# define BLUE 0x000000FF
-# define RG 0x00FFFF00
-# define RB 0x00FF00FF
-# define GB 0x0000FFFF
-# define WHITE 0x00FFFFFF
+int max(int a, int b)
+{
+	if(a >= b)
+		return a;
+	return b;
+}
 
+int min(int a, int b)
+{
+	if(a <= b)
+		return a;
+	return b;
+}
 
+int change_steepness(int keycode, t_mlx *mlx)
+{
+	printf("%d\n", keycode);
+	printf("%p\n", mlx);
+	printf("%p\n", mlx->map);
+	printf("%f\n", mlx->map->steepness);
+	if(keycode == 7)
+	{
+		mlx->map->steepness += 0.1;
+	}
+	if(keycode == 6)
+	{
+		mlx->map->steepness -= 0.1;
+	}
+	return 0;
+}
+
+//ESC == 53
 int	close_window_keypress(int keycode, t_mlx *mlx)
 {
 	if (keycode == 53)
@@ -44,145 +69,13 @@ int	close_window_button(t_mlx *mlx)
 	exit(EXIT_SUCCESS);
 }
 
-void	image_pixel_put(t_data img, int x, int y, int color)
+void	image_pixel_put(t_mlx_image img, int x, int y, int color)
 {
 	char	*dst;
 
 	dst = img.addr + (x * (img.bits_per_pixel / 8) + y * img.line_length);
 	*(unsigned int *)dst = color;
 }
-
-void	print_map(t_map map)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < map.height)
-	{
-		j = 0;
-		while (j < map.width)
-		{
-			printf("%2d ", *(map.map + j + i * map.height));
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
-}
-
-int	*str_to_int_arr(char *line, int *width)
-{
-	int	*map_line_temp;
-	int	*map_line;
-	int	i;
-
-	i = 0;
-	map_line_temp = malloc(sizeof(int) * ft_strlen(line));
-	if (map_line_temp == NULL)
-		return (NULL);
-	while (*line)
-	{
-		if (*line == ' ')
-			line ++;
-		if (*line == '\0' || *line == '\n')
-			break ;
-		map_line_temp[i++] = ft_atoi(line);
-		while (ft_isdigit(*line) || *line == '-')
-			line ++;
-	}
-	map_line = malloc(sizeof(int) * i);
-	ft_memcpy(map_line, map_line_temp, sizeof(int) * i);
-	free(map_line_temp);
-	*width = i;
-	return (map_line);
-}
-
-void	set_w_h(char **argv, t_map *map)
-{
-	int		fd;
-	int		height;
-	char	*line;
-	int		*map_line;
-	int		width;
-
-	height = 0;
-	fd = open(argv[1], O_RDONLY);
-	while (1)
-	{
-		line = get_next_line(fd);
-		if (line == NULL)
-			break ;
-		map_line = str_to_int_arr(line, &width);
-		free(line);
-		if (map_line == NULL)
-			return ;
-		free(map_line);
-		height++;
-	}
-	map->height = height;
-	map->width = width;
-	close(fd);
-}
-
-void	fill_map(char **argv, t_map *map)
-{
-	int		fd;
-	char	*line;
-	int		width;
-	int		*map_line;
-	int		i;
-
-	set_w_h(argv, map);
-	if (map->height == 0 || map->width == 0)
-		return ;
-	map->map = malloc(sizeof(int) * map->width * map->height);
-	if (map == NULL)
-		return ;
-	fd = open(argv[1], O_RDONLY);
-	i = 0;
-	while (1)
-	{
-		line = get_next_line(fd);
-		if (line == NULL)
-			break ;
-		map_line = str_to_int_arr(line, &width);
-		ft_memcpy(map->map + width * i++, map_line, sizeof(int) * width);
-		free(line);
-		free(map_line);
-	}
-	return ;
-}
-
-void get_iso (int x, int y, t_map map, t_coord *co)
-{
-	int xx = x * 100; //6 -> 600
-	int yy = y * 100; //1 -> 100
-
-	co->x = (xx - map.map[x + y * map.width] * 100) / sqrt(2);
-	co->y = (xx + 2*yy + map.map[x + y * map.width] * 100) / sqrt(6);
-}
-
-// void connect_neighbours(t_data img, int x, int y, color)
-// {
-// 	if(x == 0 && y == 0)
-// 	{
-// 		image_draw_line(img, x, y, color);
-// 		image_draw_line(img, x, y, color);
-// 	}
-// 	else if(x == 0)
-// 	{
-//
-// 	}
-// 	else if(y == 0)
-// 	{
-//
-// 	}
-// 	else
-// 	{
-//
-// 	}
-// }
 
 int	main(int argc, char **argv)
 {
@@ -193,58 +86,98 @@ int	main(int argc, char **argv)
 		printf("%s\n", "Incorrect argument");
 		exit(EXIT_FAILURE);
 	}
+
+	// set_w_h(argv, &map);
+	// if (map.height == 0 || map.width == 0)
+	// 	exit(EXIT_FAILURE);
 	fill_map(argv, &map);
-	if (map.height == 0 || map.width == 0)
-		exit(EXIT_FAILURE);
+	set_map_values(&map);
 
+	printf("%s\n", "=====MAP=====");
 	print_map(map);
+	printf("%s\n", "=====MAP=====");
 
-	t_mlx mlx = *init_mlx();
-	t_coord start = {0,0};
+	t_mlx *mlx = init_mlx();
+	if(mlx == NULL || mlx->mlx == NULL)
+		exit(EXIT_FAILURE);
+	mlx->map = &map;
+
+	// Add axes to image
+	t_coord a1 = {WIDTH / 2, 0};
+	t_coord a2 = {WIDTH / 2, HEIGHT};
+	t_coord b1 = {0, HEIGHT / 2};
+	t_coord b2 = {WIDTH, HEIGHT / 2};
+	image_draw_line(*mlx, a1, a2, BLUE);
+	image_draw_line(*mlx, b1, b2, BLUE);
+	// end axes
 
 	int	i;
 	int	j;
+	t_coord start = {0,0};
+	t_coord *co = cart_to_iso(0, 0, map);
 	i = 0;
-	t_coord iso = start;
-
 	while (i < map.height)
 	{
 		j = 0;
 		while (j < map.width)
 		{
-			start = iso;
-
-			get_iso(j, i, map, &iso);
-			image_draw_line(mlx.img, start, iso, 0x00FF0000 - 0x00100000 * j + 0x00001000 * j + 0x00000010 * i);
-			// image_pixel_put(mlx.img, iso.x, iso.y, 0x00FF00FF);
-			printf("%2d:(%d, %d)", *(map.map + j + i * map.height), iso.x, iso.y);
+			start = *co;
+			free(co);
+			co = cart_to_iso(j, i, map);
+			iso_add_height(j, i, map, co);
+			printf("%2d:(%4d,%4d)", map.map[j + i * map.width], co->x, co->y);
+			if (j == 0 && i != 0)
+			{
+				j++;
+				continue ;
+			}
+			image_draw_line(*mlx, start, *co, 0x00FF0000);
 			j++;
 		}
 		printf("\n");
 		i++;
 	}
+	free(co);
+	co = cart_to_iso(0, 0, map);
+	start.x = 0;
+	start.y = 0;
+	i = 0;
+	while (i < map.width)
+	{
+		j = 0;
+		while (j < map.height)
+		{
+			start = *co;
+			free(co);
+			co = cart_to_iso(i, j, map);
+			iso_add_height(i, j, map, co);
 
-	// t_coord end = {636, 367};
-	// image_draw_line(mlx.img, start, end, RED);
-	// image_pixel_put(mlx.img, end.x, end.y, RB);
-	//
-	// t_coord end2 = {69, 420};
-	// image_draw_line(mlx.img, start, end2, BLUE);
-	// end2.x = 231;
-	// image_draw_line(mlx.img, start, end2, RG);
-	//
-	// end2.y = 1000;
-	// end2.x = 440;
-	// image_draw_line(mlx.img, start, end2, 0x00FFFFFF);
+			if (j == 0 && i != 0)
+			{
+				j++;
+				continue;
+			}
+			image_draw_line(*mlx, start, *co, 0x00FF0000);
+			j++;
+		}
+		i++;
+	}
+	free(co);
 
-	mlx_hook(mlx.win, 17, 0, close_window_button, &mlx);
-	mlx_key_hook(mlx.win, close_window_keypress, &mlx);
-	mlx_put_image_to_window(mlx.mlx, mlx.win, mlx.img.img, 0, 0);
-	mlx_loop(mlx.mlx);
+	mlx_hook(mlx->win, 17, 0, close_window_button, &mlx);
+	mlx_key_hook(mlx->win, close_window_keypress, &mlx);
+	mlx_key_hook(mlx->win, change_steepness, &mlx);
+	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img.img, 0, 0);
+	mlx_loop(mlx->mlx);
 
 	free(&mlx);
 
 	return (EXIT_SUCCESS);
+}
+
+t_map *init_map()
+{
+	return NULL;
 }
 
 t_mlx	*init_mlx()
@@ -253,6 +186,8 @@ t_mlx	*init_mlx()
 
 	mlx = malloc(sizeof(t_mlx));
 	mlx->mlx = mlx_init();
+	if(mlx->mlx == NULL)
+		return NULL;
 	mlx->win = mlx_new_window(mlx->mlx, WIDTH, HEIGHT, "FDF by Thibauld Nuyten");
 	mlx->img.img = mlx_new_image(mlx->mlx, WIDTH, HEIGHT);
 	mlx->img.addr = mlx_get_data_addr(mlx->img.img, &mlx->img.bits_per_pixel, &mlx->img.line_length, &mlx->img.endian);
