@@ -6,7 +6,7 @@
 #    By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/11 14:33:40 by tnuyten           #+#    #+#              #
-#    Updated: 2022/05/30 17:56:19 by tnuyten          ###   ########.fr        #
+#    Updated: 2022/08/25 17:48:47 by tnuyten          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,20 +15,25 @@ SRCS =			fdf.c \
 				src/iso/iso.c \
 				src/map/map.c \
 				src/math/math.c \
+				src/draw/draw.c \
+				src/draw/draw_helpers.c \
+				src/hooks/hooks.c \
 				lib/gnl/get_next_line.c \
 				lib/gnl/get_next_line_utils.c \
 
-FILES = 		$(SRCS)
+OBJS =			$(SRCS:.c=.o)
 
-OBJS =			$(FILES:.c=.o)
-
-CC =			gcc
+CC =			clang
 RM =			rm -f
-CFLAGS =		-Imlx #-Wall -Wextra -Werror
+CFLAGS =		-Imlx -Wall -Wextra -Werror #-fsanitize=address -g
 
 NAME =			fdf
 
 all:			ft_printf libft $(NAME)
+
+lib/libft/libft.a: libft
+
+lib/ft_printf/libftprintf.a: ft_printf
 
 libft:
 				@$(MAKE) -C lib/libft
