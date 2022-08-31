@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 19:35:42 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/08/30 21:11:16 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/08/31 17:35:32 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static int	get_color(int i, int j, int direction, t_mlx mlx)
 	else
 		color = mlx.map->color_map[j * mlx.map->width + i];
 	if (color == 0)
-		color = 0x00123456;
+		color = 0x00FF0000;
 	return (color);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 16:29:14 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/08/30 21:23:50 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/08/31 17:19:31 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,13 +108,9 @@ void	make_map(char **argv, t_map *map)
 	int		tile_width;
 	int		tile_length;
 
-	map->steepness = 1;
-	map->x_offset = 0;
-	map->y_offset = 0;
-	map->angle = 45;
 	set_w_h(argv, map);
 	map->map = malloc(sizeof(int) * map->width * map->height);
-	if (map->map == NULL)
+	if (map->map == NULL || map->width == 0 || map->height == 0)
 		exit(EXIT_FAILURE);
 	ft_bzero(map->map, sizeof(int) * map->width * map->height);
 	map->color_map = malloc(sizeof(int) * map->width * map->height);

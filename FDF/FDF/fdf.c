@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 17:22:17 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/08/30 21:16:50 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/08/30 21:34:34 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_mlx	*init_mlx(void)
 	mlx->mlx = mlx_init();
 	if (mlx->mlx == NULL)
 		return (NULL);
-	mlx->win = mlx_new_window(mlx->mlx, WIDTH, HEIGHT, "FDF");
+	mlx->win = mlx_new_window(mlx->mlx, WIDTH, HEIGHT, "Fil de fer");
 	mlx->img.img = mlx_new_image(mlx->mlx, WIDTH, HEIGHT);
 	mlx->img.addr = mlx_get_data_addr(mlx->img.img, &mlx->img.bits_per_pixel,
 			&mlx->img.line_length, &mlx->img.endian);

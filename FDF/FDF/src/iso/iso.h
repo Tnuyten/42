@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 16:26:08 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/08/25 19:29:01 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/08/31 16:17:01 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define ISO_H
 
 # include "../../fdf.h"
+# define PI 3.14159265
 
 t_coord	*cart_to_iso(int x, int y, t_map map);
 

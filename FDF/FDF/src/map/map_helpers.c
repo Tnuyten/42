@@ -6,21 +6,17 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 21:25:33 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/08/30 21:25:34 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/08/31 17:15:54 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "map.h"
 
-void	set_width(char **argv, t_map *map)
+void	set_width(char *line, t_map *map)
 {
-	int		fd;
 	int		width;
-	char	*line;
 
 	width = 0;
-	fd = open(argv[1], O_RDONLY);
-	line = get_next_line(fd);
 	if (line == NULL)
 		return ;
 	while (line != NULL && *line != '\n' && *line != '\0')
@@ -34,7 +30,6 @@ void	set_width(char **argv, t_map *map)
 		width++;
 	}
 	map->width = width;
-	close(fd);
 }
 
 void	set_w_h(char **argv, t_map *map)
@@ -43,10 +38,14 @@ void	set_w_h(char **argv, t_map *map)
 	int		height;
 	char	*line;
 
+	map->steepness = 1;
+	map->x_offset = 0;
+	map->y_offset = 0;
+	map->angle = 45;
 	height = 1;
 	fd = open(argv[1], O_RDONLY);
 	line = get_next_line(fd);
-	set_width(argv, map);
+	set_width(line, map);
 	free(line);
 	while (1)
 	{
