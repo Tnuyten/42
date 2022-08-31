@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 21:25:33 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/08/31 17:15:54 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/08/31 18:47:25 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	set_w_h(char **argv, t_map *map)
 	map->x_offset = 0;
 	map->y_offset = 0;
 	map->angle = 45;
+	map->scale_factor = 0;
 	height = 1;
 	fd = open(argv[1], O_RDONLY);
 	line = get_next_line(fd);

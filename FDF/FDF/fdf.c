@@ -6,25 +6,32 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 17:22:17 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/08/30 21:34:34 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/08/31 19:17:19 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
+static void	stop(char *message)
+{
+	ft_printf("%s\n", message);
+	exit(EXIT_FAILURE);
+}
+
 int	main(int argc, char **argv)
 {
 	t_map	map;
 	t_mlx	*mlx;
+	char	*ptr;
 
 	if (argc != 2)
-	{
-		ft_printf("%s\n", "Incorrect argument");
-		exit(EXIT_FAILURE);
-	}
+		stop("Incorrect number of arguments");
+	ptr = ft_strchr(argv[1], '.');
+	if (ptr == NULL || ptr[1] != 'f' || ptr[2] != 'd' || ptr[3] != 'f')
+		stop("Incorrect argument.");
 	mlx = init_mlx();
 	if (mlx == NULL || mlx->mlx == NULL)
-		exit(EXIT_FAILURE);
+		stop("Could not initialize MLX");
 	mlx->map = &map;
 	make_map(argv, mlx->map);
 	mlx_hook(mlx->win, 17, 0, close_window_button, mlx);

@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 21:25:26 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/08/30 21:25:26 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/08/31 18:39:09 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_map
 	int		y_offset;
 	int		angle;
 	float	steepness;
+	int		scale_factor;
 }	t_map;
 
 typedef struct s_mlx {

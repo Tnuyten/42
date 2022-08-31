@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 19:35:42 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/08/31 17:35:32 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/08/31 18:55:01 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,16 @@ static t_coord	*add_offset(t_coord *co, t_map map)
 	return (co);
 }
 
-static t_coord	*recenter(t_map map, t_coord *co)
+static t_coord	*recenter(t_map *map, t_coord *co)
 {
 	t_coord	*right;
 	t_coord	*left;
 	t_coord	*top;
 	t_coord	*bottom;
 
-	right = cart_to_iso(map.width - 1, 0, map);
-	left = cart_to_iso(0, map.height - 1, map);
-	bottom = cart_to_iso(map.width - 1, map.height - 1, map);
+	right = cart_to_iso(map->width - 1, 0, map);
+	left = cart_to_iso(0, map->height - 1, map);
+	bottom = cart_to_iso(map->width - 1, map->height - 1, map);
 	top = cart_to_iso(0, 0, map);
 	if (left->x < 0)
 		co->x -= left->x;
@@ -45,7 +45,7 @@ static t_coord	*recenter(t_map map, t_coord *co)
 	return (co);
 }
 
-static t_coord	*get_coordinates(int x, int y, t_map map, int direction)
+static t_coord	*get_coordinates(int x, int y, t_map *map, int direction)
 {
 	t_coord	*co;
 
@@ -58,7 +58,7 @@ static t_coord	*get_coordinates(int x, int y, t_map map, int direction)
 		co = cart_to_iso(y, x, map);
 	}
 	co = recenter(map, co);
-	co = add_offset(co, map);
+	co = add_offset(co, *map);
 	return (co);
 }
 
@@ -83,7 +83,7 @@ void	draw_map(t_mlx mlx, int m, int n, int direction)
 	t_coord	*end;
 	int		color;
 
-	end = get_coordinates(0, 0, *mlx.map, direction);
+	end = get_coordinates(0, 0, mlx.map, direction);
 	i = 0;
 	while (i < m)
 	{
@@ -92,7 +92,7 @@ void	draw_map(t_mlx mlx, int m, int n, int direction)
 		{
 			start = *end;
 			free(end);
-			end = get_coordinates(j, i, *mlx.map, direction);
+			end = get_coordinates(j, i, mlx.map, direction);
 			color = get_color(i, j, direction, mlx);
 			if (j++ == 0 && i != 0)
 				continue ;
