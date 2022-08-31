@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/13 18:04:05 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/08/23 17:52:56 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/08/31 20:26:46 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 // The number given is always positive.
 int	str_is_int(char *str, int sign)
 {
-	long 		num;
+	long		num;
 	long		exp;
 	int			i;
 	int			j;
@@ -35,7 +35,7 @@ int	str_is_int(char *str, int sign)
 			j++;
 		}
 		num += (str[i] - '0') * exp;
-		if(num - sign > INT_MAX)
+		if (num - sign > INT_MAX)
 			return (0);
 		i--;
 	}
