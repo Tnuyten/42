@@ -1,42 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   queue_operations_swap.c                            :+:      :+:    :+:   */
+/*   parse.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/14 15:09:33 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/06/13 19:22:37 by tnuyten          ###   ########.fr       */
+/*   Created: 2022/06/13 18:04:26 by tnuyten           #+#    #+#             */
+/*   Updated: 2022/06/27 13:21:36 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "queue_operations_swap.h"
+#ifndef PARSE_H
+# define PARSE_H
 
-void	sa(t_queue **a)
-{
-	t_queue	*first;
-	t_queue	*second;
-	t_queue	*third;
+# include "../queue/queue.h"
+# include "../libft/libft.h"
+# include <limits.h>
+# include "../ft_printf/ft_printf.h"
 
-	if (a[0] == NULL)
-		return ;
-	first = a[0];
-	if (queue_size(first) < 2)
-		return ;
-	second = first->next;
-	third = second->next;
-	first->next = third;
-	second->next = first;
-	a[0] = second;
-}
+int		has_duplicates(t_queue *queue);
+int		parse_input(t_queue **a, int argc, char **argv);
+int		intstr_less_than_max(char *str);
 
-void	sb(t_queue **b)
-{
-	sa(b);
-}
-
-void	ss(t_queue **a, t_queue **b)
-{
-	sa(a);
-	sb(b);
-}
+#endif

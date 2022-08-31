@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 15:28:43 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/05/06 15:31:33 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/07/07 17:07:01 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	sort(t_queue **a, t_queue **b)
 	else if (q_siz == 3)
 	{
 		sort_three(a);
-		rotate_efficiently(a, queue_index(a, queue_get_node(a, 0)) - 1);
+		rotate_to(a, queue_index(a, queue_get_node(a, 0)) - 1);
 	}
 	else if (q_siz > 3 && q_siz < 50)
 	{
@@ -45,13 +45,15 @@ void	radix_sort(t_queue **a, t_queue **b)
 	int	i;
 	int	mask;
 	int	j;
+	int	siz;
 
 	mask = 1;
 	j = 0;
-	while (j < binary_size(queue_size(a[0])))
+	siz = queue_size(a[0]);
+	while (j < binary_size(siz))
 	{
 		i = 0;
-		while (i < queue_size(a[0]))
+		while (i < siz)
 		{
 			ra_or_pb(a, b, mask);
 			i++;
@@ -86,7 +88,7 @@ void	sort_three(t_queue **a)
 	int	second;
 	int	third;
 
-	if (is_sorted(a[0]))
+	if (is_sorted(a[0]) || is_sorted_rotated(a[0]))
 		return ;
 	first = a[0]->number;
 	second = a[0]->next->number;
@@ -112,7 +114,7 @@ void	sort_small(t_queue **a, t_queue **b)
 {
 	int	insert_pos;
 
-	while (queue_size(a[0]) > 3)
+	while (queue_size(a[0]) > 3 && !is_sorted_rotated(a[0]))
 	{
 		pb(a, b);
 		ft_printf("%s\n", "pb");
@@ -121,9 +123,9 @@ void	sort_small(t_queue **a, t_queue **b)
 	while (queue_size(b[0]) > 0)
 	{
 		insert_pos = find_insert_location(a, b[0]);
-		rotate_efficiently(a, insert_pos);
+		rotate_to(a, insert_pos);
 		pa(a, b);
 		ft_printf("%s\n", "pa");
 	}
-	rotate_efficiently(a, queue_index(a, queue_get_node(a, 0)) - 1);
+	rotate_to(a, queue_index(a, queue_get_node(a, 0)) - 1);
 }

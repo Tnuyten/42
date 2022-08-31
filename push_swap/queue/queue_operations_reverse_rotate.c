@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 15:19:33 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/04/14 15:34:16 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/06/13 19:22:57 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	rra(t_queue **a)
 	t_queue	*a_top;
 	size_t	siz;
 
+	if (a[0] == NULL)
+		return ;
 	siz = queue_size(a[0]);
 	if (siz <= 1)
 		return ;

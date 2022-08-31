@@ -1,42 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   queue_operations_swap.c                            :+:      :+:    :+:   */
+/*   checker.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/14 15:09:33 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/06/13 19:22:37 by tnuyten          ###   ########.fr       */
+/*   Created: 2022/06/13 15:43:22 by tnuyten           #+#    #+#             */
+/*   Updated: 2022/06/27 16:08:33 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "queue_operations_swap.h"
+#ifndef CHECKER_H
+# define CHECKER_H
 
-void	sa(t_queue **a)
-{
-	t_queue	*first;
-	t_queue	*second;
-	t_queue	*third;
+# include "../push_swap.h"
+# include "../get_next_line/get_next_line.h"
 
-	if (a[0] == NULL)
-		return ;
-	first = a[0];
-	if (queue_size(first) < 2)
-		return ;
-	second = first->next;
-	third = second->next;
-	first->next = third;
-	second->next = first;
-	a[0] = second;
-}
+typedef void	(*t_func_single)(t_queue **);
+typedef void	(*t_func_multi)(t_queue **, t_queue **);
 
-void	sb(t_queue **b)
-{
-	sa(b);
-}
+void			do_stack_operations(t_queue **a, t_queue **b);
+t_func_single	get_single_stack_operation(char *line);
+t_func_multi	get_multi_stack_func(char *line);
 
-void	ss(t_queue **a, t_queue **b)
-{
-	sa(a);
-	sb(b);
-}
+#endif

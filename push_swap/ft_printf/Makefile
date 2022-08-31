@@ -6,7 +6,7 @@
 #    By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/11 14:33:40 by tnuyten           #+#    #+#              #
-#    Updated: 2021/11/18 16:39:03 by tnuyten          ###   ########.fr        #
+#    Updated: 2022/07/04 18:31:26 by tnuyten          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ OBJS =			$(FILES:.c=.o)
 
 CC =			gcc
 RM =			rm -f
-CFLAGS =		-Wall -Wextra -Werror
+CFLAGS =		-Wall -Wextra -Werror #-fsanitize=address -g3
 
 NAME =			libftprintf.a
 

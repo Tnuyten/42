@@ -6,17 +6,17 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 13:57:17 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/05/04 12:26:01 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/06/27 16:05:22 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
-# include "libft/libft.h"
+# include "ft_printf/ft_printf.h"
 # include "sort/sort_queue.h"
+# include "parse/parse.h"
 
-int	has_duplicates(t_queue *queue);
-int	parse_input(t_queue **a, int argc, char **argv);
+void	queue_print(t_queue *queue);
 
 #endif

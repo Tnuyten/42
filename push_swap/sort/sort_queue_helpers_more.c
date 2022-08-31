@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 19:12:42 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/05/04 12:28:08 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/05/10 16:40:34 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	find_insert_location(t_queue **a, t_queue *target)
 	return (index);
 }
 
-void	rotate_efficiently(t_queue **a, int index)
+void	rotate_to(t_queue **a, int index)
 {
 	int	i;
 	int	qs;
@@ -94,4 +94,32 @@ void	rotate_efficiently(t_queue **a, int index)
 			i++;
 		}
 	}
+}
+
+int	is_sorted_rotated(t_queue *a)
+{
+	t_queue	*cpy;
+	t_queue	*lowest_node;
+	int		i;
+
+	if (is_sorted(a))
+		return (1);
+	cpy = queue_copy(a);
+	i = 0;
+	lowest_node = queue_get_node(&cpy, i++);
+	while (lowest_node == NULL)
+	{
+		lowest_node = queue_get_node(&cpy, i++);
+	}
+	while (cpy != lowest_node)
+	{
+		ra(&cpy);
+	}
+	if (is_sorted(cpy))
+	{
+		queue_clear(&cpy);
+		return (1);
+	}
+	queue_clear(&cpy);
+	return (0);
 }

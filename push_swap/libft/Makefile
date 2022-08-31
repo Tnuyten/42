@@ -6,7 +6,7 @@
 #    By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/11 14:33:40 by tnuyten           #+#    #+#              #
-#    Updated: 2021/10/27 16:22:57 by tnuyten          ###   ########.fr        #
+#    Updated: 2022/07/04 18:31:29 by tnuyten          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,7 +69,7 @@ BONUS_OBJS =	$(BFILES:.c=.o)
 
 CC =			gcc
 RM =			rm -f
-CFLAGS =		-Wall -Wextra -Werror
+CFLAGS =		-Wall -Wextra -Werror #-fsanitize=address -g3
 
 NAME =			libft.a
 
