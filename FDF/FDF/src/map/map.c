@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 16:29:14 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/08/31 17:19:31 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/09/01 15:20:41 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,28 @@
 
 static int	*str_to_int_arr(char *line, t_map *map)
 {
-	int	*map_line_temp;
 	int	*map_line;
 	int	i;
 
 	i = 0;
-	map_line_temp = malloc(sizeof(int) * ft_strlen(line));
-	if (map_line_temp == NULL)
+	map_line = malloc(sizeof(int) * map->width);
+	if (map_line == NULL)
 		return (NULL);
 	while (*line)
 	{
 		while (*line == ' ')
-			line ++;
+			line++;
 		if (*line == '\0' || *line == '\n')
 			break ;
-		map_line_temp[i++] = ft_atoi(line);
+		map_line[i++] = ft_atoi(line);
 		while (*line != ' ' && *line != '\0' && *line != '\n')
-			line ++;
+			line++;
 	}
-	map_line = malloc(sizeof(int) * i);
-	ft_memcpy(map_line, map_line_temp, sizeof(int) * i);
-	free(map_line_temp);
 	if (i != map->width)
+	{
+		free(map_line);
 		return (NULL);
+	}
 	return (map_line);
 }
 
@@ -67,15 +66,16 @@ static void	set_color(char *line, int row, int width, t_map *map)
 	}
 }
 
-static void	do_exit(char *line, int fd)
+static int	stop(char *line, int *map_line, int fd)
 {
+	free(map_line);
 	free(line);
 	close(fd);
 	ft_printf("%s\n", "Error: Map is malformed");
-	exit(EXIT_FAILURE);
+	return (-1);
 }
 
-static void	fill_map(char **argv, t_map *map)
+static int	fill_map(char **argv, t_map *map)
 {
 	int		fd;
 	char	*line;
@@ -93,7 +93,7 @@ static void	fill_map(char **argv, t_map *map)
 			break ;
 		map_line = str_to_int_arr(line, map);
 		if (map_line == NULL)
-			do_exit(line, fd);
+			return (stop(line, map_line, fd));
 		if (ft_strchr(line, ',') != NULL)
 			set_color(line, row, width, map);
 		free(line);
@@ -101,27 +101,34 @@ static void	fill_map(char **argv, t_map *map)
 		free(map_line);
 	}
 	close(fd);
+	return (0);
 }
 
-void	make_map(char **argv, t_map *map)
+int	make_map(char **argv, t_map *map)
 {
 	int		tile_width;
 	int		tile_length;
 
 	set_w_h(argv, map);
+	if (map->width == 0 || map->height == 0)
+		return (3);
 	map->map = malloc(sizeof(int) * map->width * map->height);
-	if (map->map == NULL || map->width == 0 || map->height == 0)
-		exit(EXIT_FAILURE);
+	if (map->map == NULL)
+		return (1);
 	ft_bzero(map->map, sizeof(int) * map->width * map->height);
 	map->color_map = malloc(sizeof(int) * map->width * map->height);
 	if (map->color_map == NULL)
 	{
 		free(map->map);
-		exit(EXIT_FAILURE);
+		return (2);
 	}
 	ft_bzero(map->color_map, sizeof(int) * map->width * map->height);
 	tile_width = WIDTH / max(map->width, map->height);
 	tile_length = HEIGHT / max(map->width, map->height);
 	map->tile_height = abs(tile_width + tile_length) / 4;
-	fill_map(argv, map);
+	if (fill_map(argv, map) == -1)
+	{
+		return (-1);
+	}
+	return (0);
 }
