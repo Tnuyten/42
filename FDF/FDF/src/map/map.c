@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 16:29:14 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/09/01 15:20:41 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/09/08 17:17:16 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,6 @@ int	make_map(char **argv, t_map *map)
 	map->color_map = malloc(sizeof(int) * map->width * map->height);
 	if (map->color_map == NULL)
 	{
-		free(map->map);
 		return (2);
 	}
 	ft_bzero(map->color_map, sizeof(int) * map->width * map->height);

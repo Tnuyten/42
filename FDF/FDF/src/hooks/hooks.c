@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 13:53:05 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/09/01 15:26:57 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/09/08 17:07:32 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 int	keyhooks(int keycode, t_mlx *mlx)
 {
 	if (keycode == 7 || (0 && keycode == 'x'))
-		mlx->map->steepness += 0.1;
+		mlx->map->steepness += 0.1f;
 	else if (keycode == 6 || (0 && keycode == 'z'))
-		mlx->map->steepness -= 0.1;
+		mlx->map->steepness -= 0.1f;
 	else if (keycode == 35 || (0 && keycode == 'p'))
 		mlx->map->angle += 15;
 	else if (keycode == 37 || (0 && keycode == 'l'))

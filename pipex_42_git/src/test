@@ -1,0 +1,47 @@
+pipex   45620 tnuyten  cwd    DIR   1,13       544  529861 /Users/tnuyten/Documents/Projects/pipex_42_git
+pipex   45620 tnuyten  txt    REG   1,13     28720  566116 /Users/tnuyten/Documents/Projects/pipex_42_git/pipex
+pipex   45620 tnuyten  txt    REG    1,9   1768016  797087 /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.asan_osx_dynamic.dylib
+pipex   45620 tnuyten  txt    REG    1,9    973872 7622979 /usr/lib/dyld
+pipex   45620 tnuyten    0u   CHR   16,0   0t10009     967 /dev/ttys000
+pipex   45620 tnuyten    1u   CHR   16,0   0t10009     967 /dev/ttys000
+pipex   45620 tnuyten    2u   CHR   16,0   0t10009     967 /dev/ttys000
+pipex   45620 tnuyten   18r   REG   46,2   6289908   71832 /private/var/folders/zz/zyxvpxvq6csfxvn_n0009blc002_wv/T/AppTranslocation/53D0DB15-67D7-4DB5-8E3F-27549445B01D/d/Atom.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Resources/v8_context_snapshot.bin
+pipex   45620 tnuyten   24r   REG   46,2 303074797   71495 /private/var/folders/zz/zyxvpxvq6csfxvn_n0009blc002_wv/T/AppTranslocation/53D0DB15-67D7-4DB5-8E3F-27549445B01D/d/Atom.app/Contents/Resources/app.asar
+pipex   45620 tnuyten   27r   REG   1,13      3106  529902 /Users/tnuyten/Documents/Projects/pipex_42_git/pipex.c
+pipex   45620 tnuyten   28r   REG   1,13      1724  548236 /Users/tnuyten/Documents/Projects/pipex_42_git/src/parse.c
+pipex   45620 tnuyten   29r   REG   1,13      1751  548303 /Users/tnuyten/Documents/Projects/pipex_42_git/src/fork.c
+pipex   45620 tnuyten   30r   DIR   1,13       136  529932 /Users/tnuyten/Documents/Projects/pipex_42_git/lib
+pipex   45620 tnuyten   31r   REG   1,13       623  548274 /Users/tnuyten/Documents/Projects/pipex_42_git/src/free.c
+pipex   45620 tnuyten   32r   DIR   1,13       374  529901 /Users/tnuyten/Documents/Projects/pipex_42_git/src
+pipex   45620 tnuyten   33r   REG   1,13      1720  529929 /Users/tnuyten/Documents/Projects/pipex_42_git/Makefile
+pipex   45620 tnuyten   34r   DIR   1,13       544  529861 /Users/tnuyten/Documents/Projects/pipex_42_git
+pipex   45620 tnuyten   37r   REG   1,13         0  548490 /Users/tnuyten/Documents/Projects/pipex_42_git/test2.txt
+pipex   45620 tnuyten   42r   REG   1,13      1333   72166 /Users/tnuyten/.atom/keymap.cson
+pipex   45620 tnuyten   43r   REG   1,13       712   72170 /Users/tnuyten/.atom/styles.less
+pipex   45620 tnuyten   44r   REG   46,2 303074797   71495 /private/var/folders/zz/zyxvpxvq6csfxvn_n0009blc002_wv/T/AppTranslocation/53D0DB15-67D7-4DB5-8E3F-27549445B01D/d/Atom.app/Contents/Resources/app.asar
+pipex   45620 tnuyten   45r   REG   1,13       710   72169 /Users/tnuyten/.atom/snippets.cson
+pipex   45620 tnuyten   63r   REG   1,13       469  548240 /Users/tnuyten/Documents/Projects/pipex_42_git/src/hdr.h
+
+pipex   45669 tnuyten  cwd    DIR   1,13       544  529861 /Users/tnuyten/Documents/Projects/pipex_42_git
+pipex   45669 tnuyten  txt    REG   1,13     28720  566121 /Users/tnuyten/Documents/Projects/pipex_42_git/pipex
+pipex   45669 tnuyten  txt    REG    1,9   1768016  797087 /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.asan_osx_dynamic.dylib
+pipex   45669 tnuyten  txt    REG    1,9    973872 7622979 /usr/lib/dyld
+pipex   45669 tnuyten    0u   CHR   16,0   0t10353     967 /dev/ttys000
+pipex   45669 tnuyten    1u   CHR   16,0   0t10353     967 /dev/ttys000
+pipex   45669 tnuyten    2u   CHR   16,0   0t10353     967 /dev/ttys000
+pipex   45669 tnuyten   18r   REG   46,2   6289908   71832 /private/var/folders/zz/zyxvpxvq6csfxvn_n0009blc002_wv/T/AppTranslocation/53D0DB15-67D7-4DB5-8E3F-27549445B01D/d/Atom.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Resources/v8_context_snapshot.bin
+pipex   45669 tnuyten   24r   REG   46,2 303074797   71495 /private/var/folders/zz/zyxvpxvq6csfxvn_n0009blc002_wv/T/AppTranslocation/53D0DB15-67D7-4DB5-8E3F-27549445B01D/d/Atom.app/Contents/Resources/app.asar
+pipex   45669 tnuyten   27r   REG   1,13      3106  529902 /Users/tnuyten/Documents/Projects/pipex_42_git/pipex.c
+pipex   45669 tnuyten   28r   REG   1,13      1724  548236 /Users/tnuyten/Documents/Projects/pipex_42_git/src/parse.c
+pipex   45669 tnuyten   29r   REG   1,13      1769  548303 /Users/tnuyten/Documents/Projects/pipex_42_git/src/fork.c
+pipex   45669 tnuyten   30r   DIR   1,13       136  529932 /Users/tnuyten/Documents/Projects/pipex_42_git/lib
+pipex   45669 tnuyten   31r   REG   1,13       623  548274 /Users/tnuyten/Documents/Projects/pipex_42_git/src/free.c
+pipex   45669 tnuyten   32r   DIR   1,13       374  529901 /Users/tnuyten/Documents/Projects/pipex_42_git/src
+pipex   45669 tnuyten   33r   REG   1,13      1720  529929 /Users/tnuyten/Documents/Projects/pipex_42_git/Makefile
+pipex   45669 tnuyten   34r   DIR   1,13       544  529861 /Users/tnuyten/Documents/Projects/pipex_42_git
+pipex   45669 tnuyten   37r   REG   1,13         0  548490 /Users/tnuyten/Documents/Projects/pipex_42_git/test2.txt
+pipex   45669 tnuyten   42r   REG   1,13      1333   72166 /Users/tnuyten/.atom/keymap.cson
+pipex   45669 tnuyten   43r   REG   1,13       712   72170 /Users/tnuyten/.atom/styles.less
+pipex   45669 tnuyten   44r   REG   46,2 303074797   71495 /private/var/folders/zz/zyxvpxvq6csfxvn_n0009blc002_wv/T/AppTranslocation/53D0DB15-67D7-4DB5-8E3F-27549445B01D/d/Atom.app/Contents/Resources/app.asar
+pipex   45669 tnuyten   45r   REG   1,13       710   72169 /Users/tnuyten/.atom/snippets.cson
+pipex   45669 tnuyten   63r   REG   1,13       469  548240 /Users/tnuyten/Documents/Projects/pipex_42_git/src/hdr.h
