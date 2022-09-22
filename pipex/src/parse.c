@@ -26,9 +26,9 @@ static char	*find_prog_in_path(char **paths, int path_size, char *prog_name)
 	return (prog_loc);
 }
 
-static int count_spaces(char *str)
+static int	count_spaces(char *str)
 {
-	int count;
+	int	count;
 
 	count = 0;
 	while (*str)
@@ -46,27 +46,25 @@ static int count_spaces(char *str)
 // +1 for NULL termination,
 // +1 for the # of spaces being one less than # of words.
 // +1 for the infile (NULL on the second pass, doesn't matter).
-char **build_argv(char *prog, char *infile, char **split)
+static char	**build_argv(char *prog, char **split)
 {
-	char **args;
-	int i;
+	char	**args;
+	int		i;
 
 	args = (char **)malloc(sizeof(char *) * (count_spaces(prog) + 3));
-	if(args == NULL)
+	if (args == NULL)
 		return (NULL);
 	i = 0;
-	while(split[i] != NULL)
+	while (split[i] != NULL)
 	{
 		args[i] = ft_strdup(split[i]);
 		i++;
 	}
-	if(infile)
-		args[i++] = ft_strdup(infile);
 	args[i] = NULL;
 	return (args);
 }
 
-t_prog	*parse_args(char *prog, t_path *paths, char *infile)
+t_prog	*parse_args(char *prog, t_path *paths)
 {
 	t_prog	*pdata;
 	char	**argv;
@@ -76,17 +74,17 @@ t_prog	*parse_args(char *prog, t_path *paths, char *infile)
 	if (pdata == NULL)
 		return (NULL);
 	split = ft_split(prog, ' ');
-	if(split == NULL)
+	if (split == NULL)
 	{
 		free(pdata);
 		return (NULL);
 	}
-	argv = build_argv(prog, infile, split);
-	if(argv == NULL)
+	argv = build_argv(prog, split);
+	if (argv == NULL)
 	{
 		free(pdata);
 		free_split(split);
-		return NULL;
+		return (NULL);
 	}
 	pdata->name = argv[0];
 	pdata->argv = argv;

@@ -2,13 +2,13 @@
 
 void	free_pdata(t_prog *pdata)
 {
-	int i;
+	int	i;
 
 	if (pdata == NULL)
 		return ;
 	free(pdata->loc);
 	i = 0;
-	while(pdata->argv[i])
+	while (pdata->argv[i])
 	{
 		free(pdata->argv[i++]);
 	}
@@ -41,8 +41,10 @@ void	free_all(t_path *paths, t_prog *p1, t_prog *p2, int *fds)
 
 void	free_split(char **split)
 {
-	int i = 0;
-	while(split[i])
+	int	i;
+
+	i = 0;
+	while (split[i])
 		free(split[i++]);
 	free(split);
 }
