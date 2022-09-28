@@ -16,7 +16,7 @@ SRCS =			pipex.c \
 				src/parse.c \
 				src/path.c
 
-OBJS =			$(SRCS:.c=.o)
+OBJS =			@$(SRCS:.c=.o)
 
 CC =			clang
 RM =			rm -f

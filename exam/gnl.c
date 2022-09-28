@@ -1,8 +1,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#include <stdio.h>
-
 #ifndef BUFFER_SIZE
 # define BUFFER_SIZE 1
 #endif
@@ -11,15 +9,16 @@ char	*ft_strjoin(char *p1, char *p2);
 char	*get_next_line(int fd);
 int		 ft_strlen(char *str);
 
-
 char	*get_next_line(int fd)
 {
-	static char buf[1];
+	static char buf[BUFFER_SIZE / BUFFER_SIZE];
+	char *storage;
+
 	*buf = '\0';
-	char *storage = malloc(sizeof(char) * 2);
+	storage = malloc(sizeof(char) * 2);
 	storage[0] = '\0';
 
-	int stored = 1;
+	int stored;
 	while(*buf != '\n')
 	{
 		stored = read(fd, buf, 1);
@@ -69,16 +68,6 @@ char *ft_strjoin(char *p1, char *p2)
 	return (ptr);
 }
 
-char	 *ft_strchr(char* ptr, char del)
-{
-	while (*ptr++ != del)
-	{
-		if (*ptr == '\0')
-			return (NULL);
-	}
-	return ptr;
-}
-
 #include <stdio.h>
 #include <fcntl.h>
 
@@ -93,8 +82,7 @@ int main()
 		printf("%d: %s", i++, str);
 		free(str);
 		str = get_next_line(fd);
-
 		if(str == NULL)
-			return EXIT_SUCCESS;
+			break;
 	}
 }
