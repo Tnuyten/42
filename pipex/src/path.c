@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   path.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/06 14:59:20 by tnuyten           #+#    #+#             */
+/*   Updated: 2022/10/06 14:59:21 by tnuyten          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../pipex.h"
 
 // return envp[i]+5 to cut off "PATH="
@@ -15,27 +27,14 @@ static char	*find_path(char **envp)
 	return (NULL);
 }
 
-t_path	*split_path(char **envp)
+char	**split_path(char **envp)
 {
 	char	*path;
-	t_path	*paths;
-	int		path_size;
+	char	**paths;
 
 	path = find_path(envp);
 	if (path == NULL)
 		return (NULL);
-	paths = malloc(sizeof(t_path));
-	if (paths == NULL)
-		return (NULL);
-	paths->paths = ft_split(path, ':');
-	if (paths->paths == NULL)
-	{
-		free(paths);
-		return (NULL);
-	}
-	path_size = 0;
-	while (paths->paths[path_size] != NULL)
-		path_size++;
-	paths->size = path_size;
+	paths = ft_split(path, ':');
 	return (paths);
 }

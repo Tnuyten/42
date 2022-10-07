@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/06 14:59:13 by tnuyten           #+#    #+#             */
+/*   Updated: 2022/10/06 14:59:14 by tnuyten          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../pipex.h"
 
 void	free_pdata(t_prog *pdata)
@@ -16,26 +28,25 @@ void	free_pdata(t_prog *pdata)
 	free(pdata);
 }
 
-void	free_paths(t_path *paths)
+void	free_paths(char **paths)
 {
 	int	i;
 
-	i = 0;
 	if (paths == NULL)
 		return ;
-	while (i < paths->size)
+	i = 0;
+	while (paths[i])
 	{
-		free(paths->paths[i++]);
+		free(paths[i++]);
 	}
-	free(paths->paths);
 	free(paths);
 }
 
-void	free_all(t_path *paths, t_prog *p1, t_prog *p2, int *fds)
+void	free_all(char **paths, t_progs *progs, int *fds)
 {
 	free_paths(paths);
-	free_pdata(p1);
-	free_pdata(p2);
+	free_pdata(progs->p1);
+	free_pdata(progs->p2);
 	free(fds);
 }
 
