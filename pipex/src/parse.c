@@ -13,34 +13,41 @@
 #include "../pipex.h"
 #include "hdr.h"
 
+static char	*ft_strjoin3(char *s1, char *s2, char *s3)
+{
+	char	*tmp;
+	char	*ret;
+
+	tmp = ft_strjoin(s1, s2);
+	if (tmp == NULL)
+		return (NULL);
+	ret = ft_strjoin(tmp, s3);
+	free(tmp);
+	return (ret);
+}
+
 static char	*find_prog_in_path(char **paths, char *prog_name)
 {
-	char	*prog_loc;
-	char	*prog_path_temp;
 	char	*prog_path;
 	int		i;
 
 	if (prog_name == NULL)
 		return (NULL);
-	if (access(prog_name, X_OK) == 0)
+	if (ft_strchr(prog_name, '/') || access(prog_name, X_OK) == 0)
 		return (ft_strdup(prog_name));
-	i = 0;
 	if (paths == NULL)
-		return (ft_strdup(prog_name));
+		return (NULL);
+	i = 0;
 	while (paths[i] != NULL)
 	{
-		prog_path_temp = ft_strjoin(paths[i++], "/");
-		prog_path = ft_strjoin(prog_path_temp, prog_name);
-		free(prog_path_temp);
+		prog_path = ft_strjoin3(paths[i++], "/", prog_name);
+		if (prog_path == NULL)
+			return (NULL);
 		if (access(prog_path, X_OK) == 0)
-		{
-			prog_loc = ft_strdup(prog_path);
-			free(prog_path);
-			return (prog_loc);
-		}
+			return (prog_path);
 		free(prog_path);
 	}
-	return (ft_strdup(prog_name));
+	return (NULL);
 }
 
 t_prog	*parse_args(char *prog, char **paths)
@@ -57,12 +64,11 @@ t_prog	*parse_args(char *prog, char **paths)
 		free(pdata);
 		return (NULL);
 	}
-	pdata->name = argv[0];
-	if (pdata->name == NULL)
-		pdata->name = ft_strdup("");
 	pdata->argv = argv;
+	if (argv[0])
+		pdata->name = ft_strdup(argv[0]);
+	else
+		pdata->name = ft_strdup("");
 	pdata->loc = find_prog_in_path(paths, pdata->name);
-	// if (pdata->loc == NULL)
-	// 	pdata->loc = ft_strdup("");
 	return (pdata);
 }

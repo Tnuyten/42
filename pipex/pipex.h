@@ -14,7 +14,9 @@
 # define PIPEX_H
 
 # include <fcntl.h>
-# include <libc.h>
+// # include <libc.h>
+# include <sys/wait.h>
+# include <stdio.h>
 
 # include "lib/libft/libft.h"
 
@@ -30,7 +32,5 @@ typedef struct s_progs
 	t_prog	*p1;
 	t_prog	*p2;
 }	t_progs;
-
-void	ft_perror(char *str);
 
 #endif

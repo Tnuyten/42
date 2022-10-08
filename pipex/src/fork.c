@@ -15,14 +15,40 @@
 #define INPUT_END 1
 #define OUTPUT_END 0
 
-static int	set_left_pipe(int *fds, char *file)
+static void fork_checks(t_prog *prog)
+{
+	if (prog->loc == NULL)
+	{
+		ft_putstr_fd(prog->name, 2);
+		ft_putstr_fd(": command not found\n", 2);
+		exit(127);
+	}
+	if (access(prog->loc, F_OK) == -1)
+	{
+		perror(prog->loc);
+		exit(127);
+	}
+	if (access(prog->loc, X_OK) == -1)
+	{
+		perror(prog->loc);
+		exit(126);
+	}
+}
+
+static int	set_left_pipe(t_prog *prog, int *fds, char *file)
 {
 	int	file_fd;
 
+	if (access(file, R_OK) == -1)
+	{
+		perror(file);
+		exit(EXIT_FAILURE);
+	}
+	fork_checks(prog);
 	file_fd = open(file, O_RDONLY);
 	if (file_fd == -1)
 	{
-		ft_perror(file);
+		perror(file);
 		return (-1);
 	}
 	dup2(file_fd, STDIN_FILENO);
@@ -33,17 +59,23 @@ static int	set_left_pipe(int *fds, char *file)
 	return (0);
 }
 
-static int	set_right_pipe(int *fds, char *file)
+static int	set_right_pipe(t_prog *prog, int *fds, char *file)
 {
 	int	file_fd;
 
+	if (access(file, W_OK) == -1)
+	{
+		perror(file);
+		exit(EXIT_FAILURE);
+	}
+	fork_checks(prog);
 	close(fds[INPUT_END]);
 	dup2(fds[OUTPUT_END], STDIN_FILENO);
 	close(fds[OUTPUT_END]);
 	file_fd = open(file, O_WRONLY | O_TRUNC);
 	if (file_fd == -1)
 	{
-		ft_perror(file);
+		perror(file);
 		return (-1);
 	}
 	dup2(file_fd, STDOUT_FILENO);
@@ -60,26 +92,18 @@ int	do_left_fork(int *fds, t_prog *prog, char *file)
 	{
 		if (prog == NULL)
 			exit(EXIT_FAILURE);
-		if (access(file, R_OK) == -1)
-		{
-			dprintf(2, "%s\n", "testflap");
-			ft_perror(file);
-			exit(EXIT_FAILURE);
-		}
-		if (set_left_pipe(fds, file) == -1)
+		if (set_left_pipe(prog, fds, file) == -1)
 			exit(EXIT_FAILURE);
 		if (execve(prog->loc, prog->argv, NULL) == -1)
 		{
 			if (ft_strchr(prog->name, '/'))
-				ft_perror(prog->name);
+				perror(prog->name);
 			else
 			{
-				ft_putstr_fd("pipex: ", 2);
 				ft_putstr_fd(prog->name, 2);
 				ft_putstr_fd(": command not found\n", 2);
 				exit(127);
 			}
-			exit(EXIT_FAILURE);
 		}
 		exit(EXIT_FAILURE);
 	}
@@ -96,20 +120,14 @@ int	do_right_fork(int *fds, t_prog *prog, char *file)
 	{
 		if (prog == NULL)
 			exit(EXIT_FAILURE);
-		if (access(file, W_OK) == -1)
-		{
-			ft_perror(file);
-			exit(EXIT_FAILURE);
-		}
-		if (set_right_pipe(fds, file) == -1)
+		if (set_right_pipe(prog, fds, file) == -1)
 			exit(EXIT_FAILURE);
 		if (execve(prog->loc, prog->argv, NULL) == -1)
 		{
 			if (ft_strchr(prog->name, '/'))
-				ft_perror(prog->name);
+				perror(prog->name);
 			else
 			{
-				ft_putstr_fd("pipex: ", 2);
 				ft_putstr_fd(prog->name, 2);
 				ft_putstr_fd(": command not found\n", 2);
 				exit(127);

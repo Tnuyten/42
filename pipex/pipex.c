@@ -19,7 +19,7 @@ static void	create_outfile(char *f2)
 
 	if (access(f2, F_OK) == -1)
 	{
-		fd = open(f2, O_CREAT, 0666);
+		fd = open(f2, O_CREAT, 0664);
 		close(fd);
 	}
 }
@@ -49,18 +49,22 @@ int	main(int argc, char *const *argv, char **envp)
 	int		*pipe_x;
 	int		exit_status;
 
-	printf("[%s]\n", argv[1]);
-
 	if (argc != 5)
+	{
+		ft_putstr_fd("Invalid arguments\n", 2);
 		return (EXIT_FAILURE);
+	}
 	paths = split_path(envp);
 	progs.p1 = parse_args(argv[2], paths);
 	progs.p2 = parse_args(argv[3], paths);
 	pipe_x = malloc(sizeof(int) * 2);
 	if (pipe_x == NULL)
+	{
+		free_all(paths, progs, NULL);
 		return (EXIT_FAILURE);
+	}
 	pipe(pipe_x);
 	exit_status = fork_wrap(pipe_x, progs, argv);
-	free_all(paths, &progs, pipe_x);
+	free_all(paths, progs, pipe_x);
 	return (exit_status);
 }
