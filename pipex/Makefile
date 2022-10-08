@@ -11,7 +11,8 @@
 # **************************************************************************** #
 
 SRCS =			pipex.c\
-				src/fork.c\
+				src/left_fork.c\
+				src/right_fork.c\
 				src/free.c\
 				src/parse.c\
 				src/path.c\

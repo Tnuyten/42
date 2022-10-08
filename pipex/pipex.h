@@ -20,6 +20,9 @@
 
 # include "lib/libft/libft.h"
 
+#define INPUT_END 1
+#define OUTPUT_END 0
+
 typedef struct s_prog
 {
 	char	*name;
@@ -32,5 +35,7 @@ typedef struct s_progs
 	t_prog	*p1;
 	t_prog	*p2;
 }	t_progs;
+
+void	fork_checks(t_prog *prog);
 
 #endif
