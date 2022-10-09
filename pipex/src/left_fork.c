@@ -10,6 +10,9 @@ static int	set_pipe(t_prog *prog, int *fds, char *file)
 		exit(EXIT_FAILURE);
 	}
 	fork_checks(prog);
+	close(fds[OUTPUT_END]);
+	dup2(fds[INPUT_END], STDOUT_FILENO);
+	close(fds[INPUT_END]);
 	file_fd = open(file, O_RDONLY);
 	if (file_fd == -1)
 	{
@@ -18,9 +21,6 @@ static int	set_pipe(t_prog *prog, int *fds, char *file)
 	}
 	dup2(file_fd, STDIN_FILENO);
 	close(file_fd);
-	close(fds[OUTPUT_END]);
-	dup2(fds[INPUT_END], STDOUT_FILENO);
-	close(fds[INPUT_END]);
 	return (0);
 }
 
