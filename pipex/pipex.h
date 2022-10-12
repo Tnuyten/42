@@ -6,7 +6,7 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/02 14:51:07 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/10/06 15:00:53 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/10/12 19:54:19 by tnuyten          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,13 @@
 # define PIPEX_H
 
 # include <fcntl.h>
-// # include <libc.h>
 # include <sys/wait.h>
 # include <stdio.h>
 
 # include "lib/libft/libft.h"
 
-#define INPUT_END 1
-#define OUTPUT_END 0
+# define INPUT_END 1
+# define OUTPUT_END 0
 
 typedef struct s_prog
 {

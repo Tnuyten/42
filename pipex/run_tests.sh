@@ -245,13 +245,13 @@ rm -f /tmp/no_read_permissions
 
 # Test 16: Executable no execute permission
 echo "Test 16: Executable no execute permission."
-cp "pipex" "/home/thibauld/Projects/pipex_exe"
-chmod 444 "/home/thibauld/Projects/pipex_exe"
-run_bash "< $file_in grep codam | /home/thibauld/Projects/pipex_exe > /tmp/file_out_bash"
-run_pipex "$file_in" "grep codam" "/home/thibauld/Projects/pipex_exe" "/tmp/file_out_yours"
+cp "pipex" "/tmp/pipex_exe"
+chmod 444 "/tmp/pipex_exe"
+run_bash "< $file_in grep codam | /tmp/pipex_exe > /tmp/file_out_bash"
+run_pipex "$file_in" "grep codam" "/tmp/pipex_exe" "/tmp/file_out_yours"
 compare_outputs "$exit_status_bash" "$exit_status_yours" "/tmp/file_out_bash" "/tmp/file_out_yours"
 # compare_errors "$error_msg_bash" "$error_msg_yours"
-rm -f "/home/thibauld/Projects/pipex_exe"
+rm -f "/tmp/pipex_exe"
 
 # Test 17: Using pipe but not needed.
 echo "Test 17: Using pipe but not needed."

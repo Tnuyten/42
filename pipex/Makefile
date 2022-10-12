@@ -6,7 +6,7 @@
 #    By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/11 14:33:40 by tnuyten           #+#    #+#              #
-#    Updated: 2022/09/30 13:49:01 by tnuyten          ###   ########.fr        #
+#    Updated: 2022/10/12 19:54:59 by tnuyten          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,13 +16,12 @@ SRCS =			pipex.c\
 				src/free.c\
 				src/parse.c\
 				src/path.c\
-				src/perror.c\
 
 OBJS =			$(SRCS:.c=.o)
 
 CC =			clang
 RM =			rm -f
-CFLAGS =		-Wall -Wextra -Werror -fsanitize=address -g -fno-omit-frame-pointer
+CFLAGS =		-Wall -Wextra -Werror
 
 NAME =			pipex
 

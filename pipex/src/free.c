@@ -43,13 +43,11 @@ void	free_paths(char **paths)
 	free(paths);
 }
 
-void	free_all(char **paths, t_progs progs, int *fds)
+void	free_all(char **paths, t_progs progs)
 {
 	free_paths(paths);
 	free_pdata(progs.p1);
 	free_pdata(progs.p2);
-	if (fds)
-		free(fds);
 }
 
 void	free_split(char **split)

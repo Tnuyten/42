@@ -46,7 +46,7 @@ int	main(int argc, char *const *argv, char **envp)
 {
 	t_progs	progs;
 	char	**paths;
-	int		*pipe_x;
+	int		pipe_x[2];
 	int		exit_status;
 
 	if (argc != 5)
@@ -57,14 +57,8 @@ int	main(int argc, char *const *argv, char **envp)
 	paths = split_path(envp);
 	progs.p1 = parse_args(argv[2], paths);
 	progs.p2 = parse_args(argv[3], paths);
-	pipe_x = malloc(sizeof(int) * 2);
-	if (pipe_x == NULL)
-	{
-		free_all(paths, progs, NULL);
-		return (EXIT_FAILURE);
-	}
 	pipe(pipe_x);
 	exit_status = fork_wrap(pipe_x, progs, argv);
-	free_all(paths, progs, pipe_x);
+	free_all(paths, progs);
 	return (exit_status);
 }

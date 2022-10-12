@@ -23,7 +23,7 @@ t_prog	*parse_args(char *prog, char **paths);
 // Free
 void	free_pdata(t_prog *pdata);
 void	free_paths(char **paths);
-void	free_all(char **paths, t_progs progs, int *fds);
+void	free_all(char **paths, t_progs progs);
 void	free_split(char **split);
 // Fork
 int		do_left_fork(int *fds, t_prog *prog, char *file);
