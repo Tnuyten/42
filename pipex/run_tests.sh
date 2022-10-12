@@ -184,14 +184,14 @@ compare_outputs "$exit_status_bash" "$exit_status_yours" "/tmp/file_out_bash" "/
 # Test 8: Test with other command than Test 1.
 echo "Test 8: Other command than Test 1."
 run_bash "< $file_in ls -la | wc -w > /tmp/file_out_bash"
-run_pipex "$file_in" "ls -la" "wc -w" /tmp/file_out_yours
+run_pipex "$file_in" "ls -la" "wc -w" "/tmp/file_out_yours"
 compare_outputs "$exit_status_bash" "$exit_status_yours" "/tmp/file_out_bash" "/tmp/file_out_yours"
 # compare_errors "$error_msg_bash" "$error_msg_yours"
 
 # Test 9: Input file doesn't exist.
 echo "Test 9: Input file doesn't exist."
 run_bash "< ewa_broer grep contents | wc -l > /tmp/file_out_bash"
-run_pipex ewa_broer "grep contents" "wc -l" /tmp/file_out_yours
+run_pipex "ewa_broer" "grep contents" "wc -l" "/tmp/file_out_yours"
 compare_outputs "$exit_status_bash" "$exit_status_yours" "/tmp/file_out_bash" "/tmp/file_out_yours"
 # compare_errors "$error_msg_bash" "$error_msg_yours"
 
