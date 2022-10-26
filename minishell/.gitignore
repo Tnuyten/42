@@ -1,0 +1,6 @@
+*.o
+*.a
+!Samenvatting.txt
+minishell
+.tags
+.vscode
