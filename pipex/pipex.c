@@ -24,17 +24,19 @@ static void	create_outfile(char *f2)
 	}
 }
 
-static int	fork_wrap(int *fds, t_progs progs, char *const *argv)
+static int	fork_wrap(t_progs progs, char *const *argv)
 {
 	int	pid1;
 	int	pid2;
 	int	status;
 	int	exit_status;
+	int	pipe_x[2];
 
 	exit_status = 0;
+	pipe(pipe_x);
 	create_outfile(argv[4]);
-	pid1 = do_left_fork(fds, progs.p1, argv[1]);
-	pid2 = do_right_fork(fds, progs.p2, argv[4]);
+	pid1 = do_left_fork(pipe_x, progs.p1, argv[1]);
+	pid2 = do_right_fork(pipe_x, progs.p2, argv[4]);
 	waitpid(pid1, 0, 0);
 	waitpid(pid2, &status, 0);
 	if (WIFEXITED(status))
@@ -46,7 +48,6 @@ int	main(int argc, char *const *argv, char **envp)
 {
 	t_progs	progs;
 	char	**paths;
-	int		pipe_x[2];
 	int		exit_status;
 
 	if (argc != 5)
@@ -57,8 +58,7 @@ int	main(int argc, char *const *argv, char **envp)
 	paths = split_path(envp);
 	progs.p1 = parse_args(argv[2], paths);
 	progs.p2 = parse_args(argv[3], paths);
-	pipe(pipe_x);
-	exit_status = fork_wrap(pipe_x, progs, argv);
+	exit_status = fork_wrap(progs, argv);
 	free_all(paths, progs);
 	return (exit_status);
 }
