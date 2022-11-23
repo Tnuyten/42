@@ -1,13 +1,17 @@
 NAME := philo
-OBJ_DIR = ./obj
-CFLAG = -Wall -Wextra -Werror -lpthread -fsanitize=thread
+CFLAG = -lpthread -g #-fsanitize=thread -O3
+WFLAG = -Wall -Wextra #-Werror
 CC = clang
 
-SRC =	philo.c\
-		ft_atoi.c\
-		philosopher.c\
+SRC =	src/main.c\
+		src/ft_atoi.c\
+		src/ft_calloc.c\
+		src/routine.c\
+		src/time.c\
+		src/parse.c\
+		src/t_philo.c\
 
-OBJ = $(SRC:.c=.o)
+OBJ = $(patsubst src/%.c,obj/%.o,$(SRC))
 #Colors:
 GREEN		=	\e[38;5;118m
 YELLOW		=	\e[38;5;226m
@@ -17,13 +21,18 @@ _INFO		=	[$(YELLOW)INFO$(RESET)]
 
 all : $(NAME)
 
-$(NAME): $(OBJ)
-	@$(CC) $(CFLAG) $(OBJ) -o $(NAME)
+obj_folder :
+	@mkdir -pv obj
+
+$(NAME): obj_folder $(OBJ)
+	@$(CC) $(CFLAG) $(OBJ) -o $(NAME) $(WFLAG)
 	@printf "$(_SUCCESS) $(NAME) ready.\n"
+
+obj/%.o : src/%.c
+	@$(CC) $(CFLAG) -o $@ -c $^ $(WFLAG)
 
 clean :
 	@test -e obj && rm -fr obj || printf "$(_INFO) No objects to clean \n"
-	rm *.o
 
 fclean : clean
 	@rm -f $(NAME)
