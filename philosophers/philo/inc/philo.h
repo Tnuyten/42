@@ -6,7 +6,11 @@
 /*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 15:39:13 by tnuyten           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2022/11/24 20:39:44 by tnuyten          ###   ########.fr       */
+=======
+/*   Updated: 2022/11/15 16:51:27 by tnuyten          ###   ########.fr       */
+>>>>>>> c8347a0c1c8a079ef9de6aacc40cb6a81c3ef694
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +62,25 @@ void	*philosopher(void *arg);
 int		gettimediff(t_setup *setup);
 int		gettimediff_ms(t_setup *setup);
 
+<<<<<<< HEAD
 // prepare.c
 void	parse(int argc, char **argv, t_setup *setup);
 int		prepare(t_setup *setup, t_mutex **forks, t_philo ***philos);
 void	swap_forks(t_mutex **f1, t_mutex **f2);
+=======
+// parse.c
+void	parse(int argc, char **argv, t_setup *setup);
+>>>>>>> c8347a0c1c8a079ef9de6aacc40cb6a81c3ef694
 
 // t_philo.c
 t_philo	*philo_new(int num, t_setup *setup, t_mutex *forks);
 void	philo_add_forks(t_philo *philo, t_mutex *forks);
 void	philo_free(t_philo *philo);
+<<<<<<< HEAD
 void	philo_print_message_if_alive(char *msg, t_philo const *philo);
+=======
+void	philo_print_message_if_alive(char *msg, t_philo *philo);
+>>>>>>> c8347a0c1c8a079ef9de6aacc40cb6a81c3ef694
 
 // ft_atoi.c
 int		ft_atoi(const char *str);

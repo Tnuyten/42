@@ -6,8 +6,11 @@ t_philo	*philo_new(int num, t_setup *setup, t_mutex *forks)
 	t_philo	*philo;
 
 	philo = ft_calloc(sizeof(t_philo), 1);
+<<<<<<< HEAD
 	if (philo == NULL)
 		return (NULL);
+=======
+>>>>>>> c8347a0c1c8a079ef9de6aacc40cb6a81c3ef694
 	philo->num = num;
 	philo->setup = setup;
 	philo->last_ate_us = 0;
@@ -33,6 +36,7 @@ void	philo_free(t_philo *philo)
 	free(philo);
 }
 
+<<<<<<< HEAD
 void	philo_print_message_if_alive(char *msg, t_philo const *philo)
 {
 	pthread_mutex_lock(philo->setup->status_mtx);
@@ -99,3 +103,13 @@ void	philo_print_message_if_alive(char *msg, t_philo const *philo)
 // 	free(num);
 // }
 */
+=======
+void	philo_print_message_if_alive(char *msg, t_philo *philo)
+{
+	pthread_mutex_lock(philo->setup->status_mtx);
+	if (philo->setup->status == ALIVE)
+		printf("%d %d %s\n", (int)(gettimediff_ms(philo->setup)), \
+		philo->num + 1, msg);
+	pthread_mutex_unlock(philo->setup->status_mtx);
+}
+>>>>>>> c8347a0c1c8a079ef9de6aacc40cb6a81c3ef694
