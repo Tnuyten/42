@@ -1,7 +1,7 @@
 NAME := philo
-CFLAG = -lpthread -g -fno-omit-frame-pointer#-fsanitize=thread
+CFLAG = -g -fno-omit-frame-pointer -fsanitize=address
 WFLAG = -Wall -Wextra #-Werror
-CC = gcc
+CC = clang
 
 SRC =	src/main.c\
 		src/ft_atoi.c\
@@ -25,7 +25,7 @@ obj_folder :
 	@mkdir -pv obj
 
 $(NAME): obj_folder $(OBJ)
-	@$(CC) $(WFLAG) $(CFLAG) $(OBJ) -o $(NAME)
+	@$(CC) $(WFLAG) $(CFLAG) $(OBJ) -o $(NAME) -lpthread
 	@printf "$(_SUCCESS) $(NAME) ready.\n"
 
 obj/%.o : src/%.c

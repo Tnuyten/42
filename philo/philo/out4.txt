@@ -1,0 +1,9 @@
+1 1 is thinking
+1 1 is eating
+2 2 is thinking
+2 3 is thinking
+202 1 is sleeping
+202 3 is eating
+302 1 is thinking
+402 3 is sleeping
+402 2 died

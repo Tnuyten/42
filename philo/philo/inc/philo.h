@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnuyten <tnuyten@student.codam.nl>         +#+  +:+       +#+        */
+/*   By: tnuyten <tnuyten@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 15:39:13 by tnuyten           #+#    #+#             */
-/*   Updated: 2022/11/24 20:39:44 by tnuyten          ###   ########.fr       */
+/*   Updated: 2022/11/25 21:34:05 by thibauld         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	*philosopher(void *arg);
 // time.c
 int		gettimediff(t_setup *setup);
 int		gettimediff_ms(t_setup *setup);
+void	sleep_while_not_dead(int sleep_time, t_philo *philo);
 
 // prepare.c
 void	parse(int argc, char **argv, t_setup *setup);
