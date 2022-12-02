@@ -1,17 +1,24 @@
 NAME := philo
-CFLAG = -lpthread -g #-fsanitize=thread -O3
-WFLAG = -Wall -Wextra #-Werror
+CFLAG = #-g -fno-omit-frame-pointer -fsanitize=address
+WFLAG = -Wall -Wextra -Werror
 CC = clang
 
-SRC =	src/main.c\
-		src/ft_atoi.c\
-		src/ft_calloc.c\
-		src/routine.c\
-		src/time.c\
-		src/parse.c\
-		src/t_philo.c\
+OBJ_DIR = obj
+SRC_DIR = src
 
-OBJ = $(patsubst src/%.c,obj/%.o,$(SRC))
+SRCS =	main.c\
+		ft_atoi.c\
+		ft_calloc.c\
+		routine.c\
+		routine_util.c\
+		time.c\
+		prepare.c\
+		t_philo.c\
+		cleanup.c
+
+SRC = $(addprefix $(SRC_DIR)/,$(SRCS))
+OBJ = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC))
+
 #Colors:
 GREEN		=	\e[38;5;118m
 YELLOW		=	\e[38;5;226m
@@ -21,21 +28,21 @@ _INFO		=	[$(YELLOW)INFO$(RESET)]
 
 all : $(NAME)
 
-obj_folder :
-	@mkdir -pv obj
+$(OBJ_DIR):
+	mkdir $@
 
-$(NAME): obj_folder $(OBJ)
-	@$(CC) $(CFLAG) $(OBJ) -o $(NAME) $(WFLAG)
-	@printf "$(_SUCCESS) $(NAME) ready.\n"
+$(NAME): $(OBJ)
+	$(CC) $(WFLAG) $(CFLAG) $(OBJ) -o $(NAME) -lpthread
+	printf "$(_SUCCESS) $(NAME) ready.\n"
 
-obj/%.o : src/%.c
-	@$(CC) $(CFLAG) -o $@ -c $^ $(WFLAG)
+$(OBJ_DIR)/%.o : $(SRC_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(WFLAG) -o $@ -c $^ $(CFLAG)
 
 clean :
-	@test -e obj && rm -fr obj || printf "$(_INFO) No objects to clean \n"
+	test -e  $(OBJ_DIR) && rm -fr $(OBJ_DIR) || printf "$(_INFO) No objects to clean \n"
 
 fclean : clean
-	@rm -f $(NAME)
+	rm -f $(NAME)
 
 re : fclean all
 
