@@ -1,0 +1,15 @@
+NO ./img/doomwall.png
+EA ./img/nukewall.png
+SO ./img/doomwall.png
+WE ./img/nukewall.png
+
+C 
+F 67, 225, 0
+
+1111111
+1000001
+1000001
+1110000
+11100E1
+1000011
+1111111

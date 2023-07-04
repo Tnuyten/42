@@ -1,0 +1,8 @@
+.DS_Store
+.vscode/
+*.o
+*.a
+.DS_Store
+*.pdf
+cub3d
+.tags

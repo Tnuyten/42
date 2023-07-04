@@ -1,0 +1,12 @@
+F 71,135,87
+C 127,224,225
+
+
+NO ./maps/texture/japan4.png
+SO ./maps/texture/skyline.png
+WE ./maps/texture/sakura_mono.png
+EA ./maps/texture/hello.png
+
+ 1
+1N1
+ 1

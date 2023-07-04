@@ -1,0 +1,16 @@
+NO ./img/Black.png
+EA ./img/slack.png
+SO ./img/mush.png
+WE ./img/doomwall.png
+
+C 255,0,0
+F 0,0,255
+
+1111111
+1000001
+1     1
+1000001
+111001 
+11100E1
+1000011111
+1111111

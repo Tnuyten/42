@@ -1,0 +1,10 @@
+F 71,135,87
+C 127,224,224
+NO ./maps/texture/japan4.png
+SO ./maps/texture/skyline.png
+WE ./maps/texture/japan4.png
+EA ./maps/texture/skyline.png
+
+11
+11
+11
