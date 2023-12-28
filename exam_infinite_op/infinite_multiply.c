@@ -35,10 +35,22 @@ int verify(char *str) {
 }
 
 int just_zero(char *str) {
-	while (*str == '0')
+	if (*str == '-' && *str != '\0')
+		str++;
+	while (*str == '0' && *str != '\0')
 		str++;
 	return *str == '\0';
 }
+
+// int just_zero(char *str) {
+// 	if (*str == '-' && *str != '\0')
+// 		str++;
+// 	while (*str == '0' && *str != '\0')
+// 		str++;
+// 	if (*str != '\0')
+// 		return 0;
+// 	return 1;
+// }
 
 void add_to_res(char *res, int pos, int toadd) {
 	if (toadd > 81) {
@@ -107,21 +119,24 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 
+	if (just_zero(s1) || just_zero(s2)) {
+		write(1, "0", 1);
+		return 0;
+	} // If either multiplicant is a zero, the answer is just zero. Necessary to avoid writing -0, if -a * 0 or a * -0.
+
 	int s1neg = 0, s2neg = 0;
 
 	// Handle negative sign
 	if (*s1 == '-') { 
-		if (!just_zero(s1))
-			s1neg = 1;
+		s1neg = 1;
 		s1++;
 	}
 	if (*s2 == '-') {
-		if (!just_zero(s2))
-			s2neg = 1;
+		s2neg = 1;
 		s2++;
 	}
 	if (s1neg ^ s2neg) { //XOR
-		write(1, "-", 1);
+			write(1, "-", 1);
 	}
 
 	char *res = multiply(s1, s2);
