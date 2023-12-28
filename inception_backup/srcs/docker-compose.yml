@@ -11,7 +11,7 @@ services:
     networks:
       - inception
     volumes:
-      - /home/tnuyten/data/PHPfiles:/var/www/html
+      - phpfilesV:/var/www/html
     ports:
       - 443:443
     expose:
@@ -26,7 +26,7 @@ services:
     networks:
       - inception
     volumes:
-      - /home/tnuyten/data/mariadb:/var/lib/mysql
+      - mariadbV:/var/lib/mysql
     env_file: .env
     restart: always
 
@@ -38,7 +38,7 @@ services:
     networks:
       - inception
     volumes:
-      - /home/tnuyten/data/PHPfiles:/var/www/html
+      - phpfilesV:/var/www/html
     env_file:
       - .env
     restart: always
@@ -50,3 +50,15 @@ services:
 networks:
   inception:
     name: inception
+
+volumes:
+  phpfilesV:
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/tnuyten/data/PHPfiles
+  mariadbV:
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/tnuyten/data/mariadb
